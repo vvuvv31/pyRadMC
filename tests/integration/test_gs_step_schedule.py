@@ -7,6 +7,10 @@ arbitrary angle — that validity is the reason it was built — so under
 is not applied (maintainer decision 2026-07-21; validated with the cap lifted on
 the R50/detour and PDD-gamma gates and the realistic tabulated spectral thorax).
 
+The schedule measurements below retain their historical 200 keV cutoff as a
+test instrument. Below it the Gaussian angular cap can bind; that does not mean
+the GS conditional has regressed. The new cutoff is measured separately.
+
 Both tests count substeps by spying the one sampler call each model makes per
 substep; counts are deterministic at a fixed seed, so the bands are physics
 statements, not statistical tolerances.
@@ -84,6 +88,7 @@ def _substep_count(
         primary_kind="electron",
         msc_model=msc_model,
         step_energy_fraction=fraction,
+        ecut=0.2,  # Preserve the energy range of the measured schedule instrument.
     )
     return calls["n"]
 
@@ -107,16 +112,16 @@ def test_gs_takes_the_energy_limited_step_at_large_fraction(
     )
 
 
-def test_schedules_agree_at_the_shipped_default_fraction(
+def test_schedules_agree_at_the_historical_fraction(
     monkeypatch: pytest.MonkeyPatch, shared_engine: tuple[ReferenceEngine, ParallelBeamSource]
 ) -> None:
     """At ``f = 0.05`` in water the cap is inert, so the schedules coincide.
 
     Measured (2026-07-20, the falsified-premise result): ``s_theta / s_E >= 1.14``
     pointwise across the transported range in water, so removing the cap under GS
-    changes nothing at the shipped default — GS alone is NOT a speed lever. This
+    changes nothing at that historical fraction/cutoff pair. This
     pins that fact as a regression test: if the ratio ever leaves the band, either
-    the cap has started binding at the default (scattering-power data changed) or
+    the cap has started binding in the measured energy range (scattering-power data changed) or
     the conditional was wired wrong. The residual difference is path-length
     feedback from the differing deflections, not schedule.
     """
@@ -124,7 +129,7 @@ def test_schedules_agree_at_the_shipped_default_fraction(
     gs = _substep_count(monkeypatch, shared_engine, "gs", 0.05)
     ratio = gs / gaussian
     assert 0.97 <= ratio <= 1.03, (
-        f"substep counts diverge at the shipped default: GS {gs} vs Gaussian "
+        f"substep counts diverge at the historical fraction/cutoff: GS {gs} vs Gaussian "
         f"{gaussian} (ratio {ratio:.3f}) — the angular cap should be inert here"
     )
 
@@ -144,7 +149,7 @@ def test_gaussian_schedule_is_untouched_by_the_conditional(
     xs = AnalyticCrossSections(geometry_densities=grid.max_density_by_material())
     source = ParallelBeamSource(energy=ENERGY_MEV, z=-0.5, x_range=(0.0, 12.0), y_range=(0.0, 12.0))
     engine = ReferenceEngine(grid=grid, cross_sections=xs, rng=HostRNG())
-    kwargs = dict(n_histories=200, n_batches=2, seed=SEED, primary_kind="electron")
+    kwargs = dict(n_histories=200, n_batches=2, seed=SEED, primary_kind="electron", ecut=0.2)
     a = engine.run(source, msc_model="gaussian", **kwargs)
     b = engine.run(source, msc_model="gaussian", **kwargs)
     np.testing.assert_array_equal(a.dose, b.dose)

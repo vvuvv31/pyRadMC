@@ -19,8 +19,16 @@ __version__ = "0.2.1"
 # --- accuracy-defining defaults ------------------------------------------------
 # Changing any of these requires a test demonstrating the dosimetric effect.
 
-ECUT_MEV: float = 0.200
-"""Electron transport and production cutoff, kinetic energy in MeV (DPM default)."""
+ECUT_MEV: float = 0.025
+"""Electron transport and production cutoff, kinetic energy in MeV.
+
+25 keV limits the locally terminated water CSDA path to about 12 micrometres,
+below a quarter of a 0.1 mm dose bin. The former 200 keV cutoff suppresses
+transport over a 0.45 mm path and biases submillimetre photon profiles.
+Spectral brass/water cutoff measurements and remaining limits: docs/minibeam.md.
+Restricted stopping, Moller and Class-II scattering tables must use this same
+cutoff; tables compiled at 200 keV must be rebuilt rather than reused.
+"""
 
 PCUT_MEV: float = 0.050
 """Photon transport cutoff in MeV. Below this, energy is deposited locally."""

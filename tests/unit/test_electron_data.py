@@ -144,7 +144,7 @@ class TestMollerConsistency:
     """
 
     @pytest.mark.parametrize("energy", [0.5, 2.0, 10.0])
-    @pytest.mark.parametrize("cut", [0.05, 0.2])
+    @pytest.mark.parametrize("cut", [0.025, 0.05, 0.2])
     def test_identity(self, xs: AnalyticCrossSections, energy: float, cut: float) -> None:
         from pyradmc.data.analytic import moller_dcs_per_electron
         from pyradmc.data.materials import MATERIALS

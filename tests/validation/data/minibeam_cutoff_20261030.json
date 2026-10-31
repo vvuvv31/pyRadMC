@@ -1,0 +1,1162 @@
+{
+  "configuration": {
+    "thickness_cm": 2.0,
+    "n_slits": 1,
+    "slit_width_cm": 0.05,
+    "slit_pitch_cm": 0.2,
+    "slit_centers_cm": [
+      0.0
+    ],
+    "air_origin_z_cm": -6.0,
+    "exit_to_water_cm": 1,
+    "transport_shape": [
+      6404,
+      8,
+      130
+    ],
+    "transport_spacing_cm": [
+      0.0025,
+      2.0,
+      0.2
+    ],
+    "scoring_shape": [
+      1601,
+      1,
+      100
+    ],
+    "scoring_spacing_cm": [
+      0.01,
+      16,
+      0.2
+    ],
+    "source": "Ali Rogers varian-6mv ideal point z=-100 cm, uniform aiming square 4x4 cm at z=0",
+    "brass": "experimental Cu70/Zn30 mass fractions, 8.5 g/cm3; EPDL/EEDL; G4 mixture I and density effect; not independently material-validated",
+    "normalization": "absolute MeV/g per emitted photon; no rescaling",
+    "cutoffs_mev": {
+      "photon": 0.05,
+      "electron": 0.025
+    },
+    "uncertainty": "SEM across runs; integrate or form paired open-minus-closed values before estimating uncertainty",
+    "note": "new engine default ECUT=25 keV; same TOPAS reference",
+    "histories_per_backend_per_case": 80000000,
+    "replicates": 80,
+    "background_band_abs_x_cm": [
+      0.5,
+      1
+    ],
+    "center_band_x_cm": [
+      -0.025,
+      0.025
+    ],
+    "ratio_name": "single-slit central/background dose ratio, NOT periodic-array PVDR"
+  },
+  "provenance": {
+    "base_commit": "6e505c28ad3ce9a628a5f18140e5743cff5c6f33",
+    "branch": "minibeam",
+    "source_gpu_seed": "2210031 + 113*batch",
+    "source_topas_seed": "2310031 + 109*batch",
+    "table": "local_minibeam_diagnosis_20261030/materials_ecut0025.npz",
+    "original_topas": "local_minibeam_highstats_20261030",
+    "note": "Local validation study; experimental brass; no scale fit. Raw maps/phase-space remain local. File hashes identify the modified source and material data.",
+    "sha256": {
+      "pyradmc/__init__.py": "395687eb299b390065f4af6d1148026f8aa7cd7eaf93d9e108fb3c3d967a46cd",
+      "pyradmc/physics/compton.py": "52774034c38962a023ddddf478ffb82f18083e924abf5ccd1df5fe65b11f0d33",
+      "pyradmc/physics/brems.py": "4b83afd2c0e3b0f1abbdfbb7f2a80e4cc31ab7cecd066e33269f603728ca8064",
+      "pyradmc/transport/electron.py": "a8e5a53a857d8d5b9e3069e514cdd866fb70386d80699baea8cb68016608dbbd",
+      "pyradmc/backends/warp/kernels.py": "b0990ccfedec00a32b860dd2dba86660feec3ebae34989c00b50b2d3fee3b9a5",
+      "local_minibeam_diagnosis_20261030/materials_ecut0025.npz": "58031648f7d7f9889b3343dede8a9305cce6c26512443b4aaa70cec1fa6696ef",
+      "EPDL2023.ALL.txt": "b4888d0d0e3b7672f56232f1c6ef8da369a67ad2f2d773168fc26275fac82fca",
+      "EEDL2023.ALL.txt": "1cf45f070fe31d5c0753930499f9e04b59c04285108b6e704f8693c25362ff57"
+    }
+  },
+  "baseline": {
+    "legacy_200kev": {
+      "totals": {
+        "closed": {
+          "candidate_mean": 0.38203874327377596,
+          "reference_mean": 0.3820268467769582,
+          "relative_difference_percent": 0.003114047328911518,
+          "ratio_sem_percent": 0.031124531838424944,
+          "welch_t": 0.10005287806435968,
+          "welch_df": 157.3262035007036,
+          "welch_two_sided_p": 0.9204297280985815
+        },
+        "slit": {
+          "candidate_mean": 0.38566082548402925,
+          "reference_mean": 0.38569462054495113,
+          "relative_difference_percent": -0.00876212918763386,
+          "ratio_sem_percent": 0.03098435789180748,
+          "welch_t": -0.2827786204962591,
+          "welch_df": 156.95386724593706,
+          "welch_two_sided_p": 0.7777191327074978
+        },
+        "paired_slit_excess": {
+          "candidate_mean": 0.0036220822102533317,
+          "reference_mean": 0.003667773767992945,
+          "relative_difference_percent": -1.2457572530329863,
+          "ratio_sem_percent": 0.49401445916219117,
+          "welch_t": -2.49884092251783,
+          "welch_df": 130.6097553883767,
+          "welch_two_sided_p": 0.013700568300639737
+        }
+      },
+      "slabs": {
+        "z0to0.4cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.00047722586988709607,
+                "sem": 2.353349962549776e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.0003590567233847929,
+                "sem": 7.022115079322351e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3294068841410778,
+                "sem": 0.006788335581804702
+              },
+              "paired_central_excess": {
+                "mean": 0.00010778792268933293,
+                "sem": 1.118304701726801e-06
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.5472169482161258,
+                "bootstrap_sd_mm": 0.003991006873883976,
+                "bootstrap_percentile95_mm": [
+                  0.5390207711888528,
+                  0.5545824706648081
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.0004623047472574948,
+                "sem": 2.493140584764023e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.00035049851240995,
+                "sem": 6.923689762954686e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3191866028463042,
+                "sem": 0.007092355852471002
+              },
+              "paired_central_excess": {
+                "mean": 0.00010116150868177523,
+                "sem": 1.6840082106224767e-06
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.5836027563896891,
+                "bootstrap_sd_mm": 0.006765171493280998,
+                "bootstrap_percentile95_mm": [
+                  0.5686838955044581,
+                  0.5954437254688084
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.00047722586988709607,
+            "reference_mean": 0.0004623047472574948,
+            "relative_difference_percent": 3.227551245821525,
+            "ratio_sem_percent": 0.7543433062738161,
+            "welch_t": 4.352196999543131,
+            "welch_df": 157.4768145957475,
+            "welch_two_sided_p": 2.415298912339353e-05
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 0.00010778792268933293,
+            "reference_mean": 0.00010116150868177523,
+            "relative_difference_percent": 6.550331340354432,
+            "ratio_sem_percent": 2.0900036161571616,
+            "welch_t": 3.2779580862126223,
+            "welch_df": 137.33267787950868,
+            "welch_two_sided_p": 0.0013245367783163728
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.0003590567233847929,
+            "reference_mean": 0.00035049851240995,
+            "relative_difference_percent": 2.441725334580891,
+            "ratio_sem_percent": 0.2847612608322168,
+            "welch_t": 8.678478397531205,
+            "welch_df": 157.9685287659771,
+            "welch_two_sided_p": 4.6633525186845104e-15
+          }
+        },
+        "z2to4cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.0004451660362547365,
+                "sem": 1.3209026792139313e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.0003336820815767958,
+                "sem": 3.9130048299443184e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3342154312963603,
+                "sem": 0.004131076215253075
+              },
+              "paired_central_excess": {
+                "mean": 0.00011047551797500446,
+                "sem": 6.218577223014619e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.6229871421517447,
+                "bootstrap_sd_mm": 0.006656321087274878,
+                "bootstrap_percentile95_mm": [
+                  0.6085595231612394,
+                  0.6350124886069086
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.00044412505024014,
+                "sem": 1.1723121384672352e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.00033364389957789823,
+                "sem": 3.2201209281639087e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3312058192479583,
+                "sem": 0.0036206507412561545
+              },
+              "paired_central_excess": {
+                "mean": 0.00010687869026164331,
+                "sem": 9.1526580722453e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.6954923535009678,
+                "bootstrap_sd_mm": 0.007376554247356842,
+                "bootstrap_percentile95_mm": [
+                  0.680326174759464,
+                  0.709970755430241
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.0004451660362547365,
+            "reference_mean": 0.00044412505024014,
+            "relative_difference_percent": 0.2343902948130694,
+            "ratio_sem_percent": 0.3980686132662599,
+            "welch_t": 0.5894273324897146,
+            "welch_df": 155.80205704923992,
+            "welch_two_sided_p": 0.5564283878805544
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 0.00011047551797500446,
+            "reference_mean": 0.00010687869026164331,
+            "relative_difference_percent": 3.365336630301119,
+            "ratio_sem_percent": 1.059279803596021,
+            "welch_t": 3.2505338275167626,
+            "welch_df": 139.12422967994266,
+            "welch_two_sided_p": 0.0014448458420527792
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.0003336820815767958,
+            "reference_mean": 0.00033364389957789823,
+            "relative_difference_percent": 0.01144393736731697,
+            "ratio_sem_percent": 0.15189414436060825,
+            "welch_t": 0.07534501233157269,
+            "welch_df": 152.3567938077171,
+            "welch_two_sided_p": 0.940039049719774
+          }
+        },
+        "z8to10cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.00030675194678796136,
+                "sem": 9.018805612445609e-07
+              },
+              "background_slit_dose": {
+                "mean": 0.00023249186963926878,
+                "sem": 3.201896946444653e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3194785417425585,
+                "sem": 0.0037548752681942554
+              },
+              "paired_central_excess": {
+                "mean": 7.287387366436548e-05,
+                "sem": 4.923361062549088e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.7112610523189247,
+                "bootstrap_sd_mm": 0.005167160043489104,
+                "bootstrap_percentile95_mm": [
+                  0.698867929206537,
+                  0.7182605189642275
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.0003048876846615361,
+                "sem": 9.475348350538422e-07
+              },
+              "background_slit_dose": {
+                "mean": 0.0002333427215432668,
+                "sem": 3.1999232923164506e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3067323126535464,
+                "sem": 0.004164710840581032
+              },
+              "paired_central_excess": {
+                "mean": 7.172893492851766e-05,
+                "sem": 8.435958205224844e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.7496692383993602,
+                "bootstrap_sd_mm": 0.00821979168942978,
+                "bootstrap_percentile95_mm": [
+                  0.7307769270035804,
+                  0.7629533629739192
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.00030675194678796136,
+            "reference_mean": 0.0003048876846615361,
+            "relative_difference_percent": 0.6114586518949805,
+            "ratio_sem_percent": 0.43043238209994567,
+            "welch_t": 1.425132417609448,
+            "welch_df": 157.6162699316476,
+            "welch_two_sided_p": 0.15609613195936917
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 7.287387366436548e-05,
+            "reference_mean": 7.172893492851766e-05,
+            "relative_difference_percent": 1.5962020584702863,
+            "ratio_sem_percent": 1.3779756724258332,
+            "welch_t": 1.1721871748531827,
+            "welch_df": 127.22165561576276,
+            "welch_two_sided_p": 0.24331228432782323
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.00023249186963926878,
+            "reference_mean": 0.0002333427215432668,
+            "relative_difference_percent": -0.36463614479624873,
+            "ratio_sem_percent": 0.19364350397931734,
+            "welch_t": -1.8796001764240327,
+            "welch_df": 157.99993993078243,
+            "welch_two_sided_p": 0.062003778313286566
+          }
+        }
+      }
+    },
+    "current_25kev": {
+      "totals": {
+        "closed": {
+          "candidate_mean": 0.3819895253925349,
+          "reference_mean": 0.3820268467769582,
+          "relative_difference_percent": -0.009769309339957566,
+          "ratio_sem_percent": 0.031292842019383434,
+          "welch_t": -0.3121738333066634,
+          "welch_df": 157.54282524004768,
+          "welch_two_sided_p": 0.7553212057991338
+        },
+        "slit": {
+          "candidate_mean": 0.38561318018030305,
+          "reference_mean": 0.38569462054495113,
+          "relative_difference_percent": -0.02111524514731844,
+          "ratio_sem_percent": 0.03119713672138957,
+          "welch_t": -0.6767565650637181,
+          "welch_df": 157.29815341705714,
+          "welch_two_sided_p": 0.499554406952008
+        },
+        "paired_slit_excess": {
+          "candidate_mean": 0.003623654787768131,
+          "reference_mean": 0.003667773767992945,
+          "relative_difference_percent": -1.2028817210543608,
+          "ratio_sem_percent": 0.49416324711043186,
+          "welch_t": -2.4128689110574975,
+          "welch_df": 130.60602594113305,
+          "welch_two_sided_p": 0.01721596056418774
+        }
+      },
+      "slabs": {
+        "z0to0.4cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.0004704473555458072,
+                "sem": 1.979928128556266e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.00035765125151225385,
+                "sem": 7.061961677612947e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3156747384430472,
+                "sem": 0.005828303760520473
+              },
+              "paired_central_excess": {
+                "mean": 9.951499428820037e-05,
+                "sem": 1.1160035675868817e-06
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.5766148779874637,
+                "bootstrap_sd_mm": 0.005138603124489003,
+                "bootstrap_percentile95_mm": [
+                  0.5672675252479559,
+                  0.587222651775206
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.0004623047472574948,
+                "sem": 2.493140584764023e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.00035049851240995,
+                "sem": 6.923689762954686e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3191866028463042,
+                "sem": 0.007092355852471002
+              },
+              "paired_central_excess": {
+                "mean": 0.00010116150868177523,
+                "sem": 1.6840082106224767e-06
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.5836027563896891,
+                "bootstrap_sd_mm": 0.006765171493280998,
+                "bootstrap_percentile95_mm": [
+                  0.5686838955044581,
+                  0.5954437254688084
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.0004704473555458072,
+            "reference_mean": 0.0004623047472574948,
+            "relative_difference_percent": 1.7613075220655583,
+            "ratio_sem_percent": 0.6961188679914196,
+            "welch_t": 2.557602962204858,
+            "welch_df": 150.29068293040848,
+            "welch_two_sided_p": 0.01152972119689531
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 9.951499428820037e-05,
+            "reference_mean": 0.00010116150868177523,
+            "relative_difference_percent": -1.627609567147037,
+            "ratio_sem_percent": 1.9745104191004197,
+            "welch_t": -0.8150115033677313,
+            "welch_df": 137.1705752644799,
+            "welch_two_sided_p": 0.4164785317137038
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.00035765125151225385,
+            "reference_mean": 0.00035049851240995,
+            "relative_difference_percent": 2.0407330841786475,
+            "ratio_sem_percent": 0.28500147113070123,
+            "welch_t": 7.23241698601203,
+            "welch_df": 157.93826023159554,
+            "welch_two_sided_p": 1.9278205576411292e-11
+          }
+        },
+        "z2to4cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.00043922540638602575,
+                "sem": 1.28021960129822e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.0003336567808881946,
+                "sem": 3.6615850309702494e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.316480996336796,
+                "sem": 0.003923695435320612
+              },
+              "paired_central_excess": {
+                "mean": 0.00010431284446181714,
+                "sem": 5.906790021688093e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.688236954107534,
+                "bootstrap_sd_mm": 0.004761035871818259,
+                "bootstrap_percentile95_mm": [
+                  0.6780406811638879,
+                  0.6973734045000283
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.00044412505024014,
+                "sem": 1.1723121384672352e-06
+              },
+              "background_slit_dose": {
+                "mean": 0.00033364389957789823,
+                "sem": 3.2201209281639087e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3312058192479583,
+                "sem": 0.0036206507412561545
+              },
+              "paired_central_excess": {
+                "mean": 0.00010687869026164331,
+                "sem": 9.1526580722453e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.6954923535009678,
+                "bootstrap_sd_mm": 0.007376554247356842,
+                "bootstrap_percentile95_mm": [
+                  0.680326174759464,
+                  0.709970755430241
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.00043922540638602575,
+            "reference_mean": 0.00044412505024014,
+            "relative_difference_percent": -1.1032126765794792,
+            "ratio_sem_percent": 0.3888930995990517,
+            "welch_t": -2.8225712547924084,
+            "welch_df": 156.79058922687167,
+            "welch_two_sided_p": 0.00538177767053315
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 0.00010431284446181714,
+            "reference_mean": 0.00010687869026164331,
+            "relative_difference_percent": -2.400708498153259,
+            "ratio_sem_percent": 1.0019976986461292,
+            "welch_t": -2.3554612757464755,
+            "welch_df": 135.07828829441158,
+            "welch_two_sided_p": 0.019938624658684123
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.0003336567808881946,
+            "reference_mean": 0.00033364389957789823,
+            "relative_difference_percent": 0.0038607959901737487,
+            "ratio_sem_percent": 0.14614939589106793,
+            "welch_t": 0.026417221728254302,
+            "welch_df": 155.46186173609084,
+            "welch_two_sided_p": 0.9789584379185753
+          }
+        },
+        "z8to10cm": {
+          "backends": {
+            "gpu": {
+              "central_slit_dose": {
+                "mean": 0.0003034438744066334,
+                "sem": 9.019147222923579e-07
+              },
+              "background_slit_dose": {
+                "mean": 0.0002324952587760399,
+                "sem": 2.8990002406595285e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.305242108171203,
+                "sem": 0.003877807434455722
+              },
+              "paired_central_excess": {
+                "mean": 6.993447834138114e-05,
+                "sem": 4.454048530484016e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.7485084168819958,
+                "bootstrap_sd_mm": 0.00533105231221997,
+                "bootstrap_percentile95_mm": [
+                  0.7376830258759278,
+                  0.7584743212049279
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            },
+            "topas": {
+              "central_slit_dose": {
+                "mean": 0.0003048876846615361,
+                "sem": 9.475348350538422e-07
+              },
+              "background_slit_dose": {
+                "mean": 0.0002333427215432668,
+                "sem": 3.1999232923164506e-07
+              },
+              "central_background_ratio": {
+                "mean": 1.3067323126535464,
+                "sem": 0.004164710840581032
+              },
+              "paired_central_excess": {
+                "mean": 7.172893492851766e-05,
+                "sem": 8.435958205224844e-07
+              },
+              "paired_excess_fwhm": {
+                "resolved": true,
+                "mean_profile_fwhm_mm": 0.7496692383993602,
+                "bootstrap_sd_mm": 0.00821979168942978,
+                "bootstrap_percentile95_mm": [
+                  0.7307769270035804,
+                  0.7629533629739192
+                ],
+                "valid_bootstrap_samples": 1000,
+                "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+              }
+            }
+          },
+          "gpu_vs_topas_central_slit": {
+            "candidate_mean": 0.0003034438744066334,
+            "reference_mean": 0.0003048876846615361,
+            "relative_difference_percent": -0.47355479658207633,
+            "ratio_sem_percent": 0.42799683913456127,
+            "welch_t": -1.1036987364659647,
+            "welch_df": 157.61685598724205,
+            "welch_two_sided_p": 0.27140602353151116
+          },
+          "gpu_vs_topas_central_excess": {
+            "candidate_mean": 6.993447834138114e-05,
+            "reference_mean": 7.172893492851766e-05,
+            "relative_difference_percent": -2.501719269810454,
+            "ratio_sem_percent": 1.3040050450398375,
+            "welch_t": -1.8810609177857056,
+            "welch_df": 119.86917307159723,
+            "welch_two_sided_p": 0.06238972892416031
+          },
+          "gpu_vs_topas_background": {
+            "candidate_mean": 0.0002324952587760399,
+            "reference_mean": 0.0002333427215432668,
+            "relative_difference_percent": -0.3631837160473772,
+            "ratio_sem_percent": 0.18467388954636527,
+            "welch_t": -1.9627023398217038,
+            "welch_df": 156.48357372540644,
+            "welch_two_sided_p": 0.05145399143542271
+          }
+        }
+      }
+    }
+  },
+  "scan": {
+    "t2_n1": {
+      "thickness_cm": 2,
+      "n_slits": 1,
+      "central_difference_percent": {
+        "candidate_mean": 0.00044679505897283914,
+        "reference_mean": 0.0004447353396466482,
+        "relative_difference_percent": 0.4631337207939179,
+        "ratio_sem_percent": 1.0595832279672979,
+        "welch_t": 0.43813936392500336,
+        "welch_df": 29.96297581631382,
+        "welch_two_sided_p": 0.664427872823371
+      },
+      "pvdr": {
+        "gpu": null,
+        "topas": null
+      }
+    },
+    "t2_n3": {
+      "thickness_cm": 2,
+      "n_slits": 3,
+      "central_difference_percent": {
+        "candidate_mean": 0.0004592891234300002,
+        "reference_mean": 0.0004591357620037403,
+        "relative_difference_percent": 0.03340219581036141,
+        "ratio_sem_percent": 1.0461564822271456,
+        "welch_t": 0.031934266781284054,
+        "welch_df": 29.792648550497898,
+        "welch_two_sided_p": 0.9747374551261283
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 1.2328361565353814,
+          "sem": 0.009865615556669583,
+          "relative_sem_percent": 0.8002373636083773
+        },
+        "topas": {
+          "mean": 1.2258211733541255,
+          "sem": 0.00925640853211186,
+          "relative_sem_percent": 0.7551189956022885
+        }
+      }
+    },
+    "t2_n5": {
+      "thickness_cm": 2,
+      "n_slits": 5,
+      "central_difference_percent": {
+        "candidate_mean": 0.00046273841635740897,
+        "reference_mean": 0.0004630363985688484,
+        "relative_difference_percent": -0.06435394978892006,
+        "ratio_sem_percent": 1.035259308165401,
+        "welch_t": -0.06214074253601175,
+        "welch_df": 29.850825984113975,
+        "welch_two_sided_p": 0.9508649734758615
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 1.2284904559873189,
+          "sem": 0.009496012122866491,
+          "relative_sem_percent": 0.7729821649476871
+        },
+        "topas": {
+          "mean": 1.222918127628685,
+          "sem": 0.008992548079570896,
+          "relative_sem_percent": 0.7353352506931934
+        }
+      }
+    },
+    "t5_n1": {
+      "thickness_cm": 5,
+      "n_slits": 1,
+      "central_difference_percent": {
+        "candidate_mean": 0.0003052124009102779,
+        "reference_mean": 0.00030506355157213535,
+        "relative_difference_percent": 0.048792894914995166,
+        "ratio_sem_percent": 1.3004420168898463,
+        "welch_t": 0.03753080573537052,
+        "welch_df": 29.302433108441278,
+        "welch_two_sided_p": 0.9703163044519073
+      },
+      "pvdr": {
+        "gpu": null,
+        "topas": null
+      }
+    },
+    "t5_n3": {
+      "thickness_cm": 5,
+      "n_slits": 3,
+      "central_difference_percent": {
+        "candidate_mean": 0.00032754670086672263,
+        "reference_mean": 0.00032914666990086595,
+        "relative_difference_percent": -0.4860960721933538,
+        "ratio_sem_percent": 1.2457877426975648,
+        "welch_t": -0.389077097858754,
+        "welch_df": 29.093537265114588,
+        "welch_two_sided_p": 0.7000523339634731
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 1.6376335833037983,
+          "sem": 0.01633157148528883,
+          "relative_sem_percent": 0.9972665223646157
+        },
+        "topas": {
+          "mean": 1.629753002898506,
+          "sem": 0.014125011459555036,
+          "relative_sem_percent": 0.866696452433822
+        }
+      }
+    },
+    "t5_n5": {
+      "thickness_cm": 5,
+      "n_slits": 5,
+      "central_difference_percent": {
+        "candidate_mean": 0.0003347340946236886,
+        "reference_mean": 0.000335944884977597,
+        "relative_difference_percent": -0.36041339161604347,
+        "ratio_sem_percent": 1.1937685270743763,
+        "welch_t": -0.3012508823386536,
+        "welch_df": 28.656334028495003,
+        "welch_two_sided_p": 0.7653983692680617
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 1.605442037189753,
+          "sem": 0.014325902628252838,
+          "relative_sem_percent": 0.8923338430411117
+        },
+        "topas": {
+          "mean": 1.5988032489761173,
+          "sem": 0.013318711510744206,
+          "relative_sem_percent": 0.833042559756717
+        }
+      }
+    },
+    "t10_n1": {
+      "thickness_cm": 10,
+      "n_slits": 1,
+      "central_difference_percent": {
+        "candidate_mean": 0.00021993398675474644,
+        "reference_mean": 0.00022088898451359652,
+        "relative_difference_percent": -0.432342862616264,
+        "ratio_sem_percent": 1.6029160724904585,
+        "welch_t": -0.2692322898504683,
+        "welch_df": 29.2707693097716,
+        "welch_two_sided_p": 0.7896397386630398
+      },
+      "pvdr": {
+        "gpu": null,
+        "topas": null
+      }
+    },
+    "t10_n3": {
+      "thickness_cm": 10,
+      "n_slits": 3,
+      "central_difference_percent": {
+        "candidate_mean": 0.00024326099167271454,
+        "reference_mean": 0.0002447758203284169,
+        "relative_difference_percent": -0.6188636825605887,
+        "ratio_sem_percent": 1.6217617661663464,
+        "welch_t": -0.3804209174321676,
+        "welch_df": 29.99999865327308,
+        "welch_two_sided_p": 0.7063133368312217
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 2.4842682205567153,
+          "sem": 0.028882290643087196,
+          "relative_sem_percent": 1.1626075801354003
+        },
+        "topas": {
+          "mean": 2.4425517982922953,
+          "sem": 0.03781136132306859,
+          "relative_sem_percent": 1.5480269998574572
+        }
+      }
+    },
+    "t10_n5": {
+      "thickness_cm": 10,
+      "n_slits": 5,
+      "central_difference_percent": {
+        "candidate_mean": 0.00024994703759439405,
+        "reference_mean": 0.00025138594370611544,
+        "relative_difference_percent": -0.5723892475879899,
+        "ratio_sem_percent": 1.617811496609665,
+        "welch_t": -0.3527268591454995,
+        "welch_df": 29.870471231830695,
+        "welch_two_sided_p": 0.7267701143274181
+      },
+      "pvdr": {
+        "gpu": {
+          "mean": 2.360856796206768,
+          "sem": 0.024860369714362864,
+          "relative_sem_percent": 1.0530231970997341
+        },
+        "topas": {
+          "mean": 2.342605983078538,
+          "sem": 0.03197164744263574,
+          "relative_sem_percent": 1.3647897970712157
+        }
+      }
+    }
+  },
+  "cutoff_10_vs_25": {
+    "z0to0.4cm": {
+      "cut10_central_vs_topas": {
+        "candidate_mean": 0.0004610920168806513,
+        "reference_mean": 0.0004623047472574948,
+        "relative_difference_percent": -0.26232271765274096,
+        "ratio_sem_percent": 1.2702975892555746,
+        "welch_t": -0.20640749733760722,
+        "welch_df": 22.10894446225446,
+        "welch_two_sided_p": 0.838361619761174
+      },
+      "paired10_minus25_percent": {
+        "mean": 0.46406085555028503,
+        "sem": 0.7723268925897981
+      },
+      "cut10_width": {
+        "resolved": true,
+        "mean_profile_fwhm_mm": 0.5773981698823225,
+        "bootstrap_sd_mm": 0.010788460682864983,
+        "bootstrap_percentile95_mm": [
+          0.5538719663633165,
+          0.5954324280658078
+        ],
+        "valid_bootstrap_samples": 1000,
+        "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+      }
+    },
+    "z2to4cm": {
+      "cut10_central_vs_topas": {
+        "candidate_mean": 0.00043823967717912727,
+        "reference_mean": 0.00044412505024014,
+        "relative_difference_percent": -1.3251612485786324,
+        "ratio_sem_percent": 0.7483633926025779,
+        "welch_t": -1.7678528518824435,
+        "welch_df": 19.47315817603383,
+        "welch_two_sided_p": 0.09275158798632054
+      },
+      "paired10_minus25_percent": {
+        "mean": 0.5402997799019508,
+        "sem": 0.457605063639972
+      },
+      "cut10_width": {
+        "resolved": true,
+        "mean_profile_fwhm_mm": 0.6936825967899061,
+        "bootstrap_sd_mm": 0.011508927638025109,
+        "bootstrap_percentile95_mm": [
+          0.6702147626579606,
+          0.7154619060050865
+        ],
+        "valid_bootstrap_samples": 1000,
+        "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+      }
+    },
+    "z8to10cm": {
+      "cut10_central_vs_topas": {
+        "candidate_mean": 0.0003021220452106569,
+        "reference_mean": 0.00030488768466153607,
+        "relative_difference_percent": -0.9071010703332938,
+        "ratio_sem_percent": 0.7959664113478713,
+        "welch_t": -1.1380567439931397,
+        "welch_df": 20.73418481466271,
+        "welch_two_sided_p": 0.26807685867776904
+      },
+      "paired10_minus25_percent": {
+        "mean": 0.034466444790087286,
+        "sem": 0.5102425014193366
+      },
+      "cut10_width": {
+        "resolved": true,
+        "mean_profile_fwhm_mm": 0.7555726224722568,
+        "bootstrap_sd_mm": 0.016302390111871148,
+        "bootstrap_percentile95_mm": [
+          0.7178517721030524,
+          0.7812677114783229
+        ],
+        "valid_bootstrap_samples": 1000,
+        "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+      }
+    }
+  },
+  "broad_cone": {
+    "configuration": {
+      "ssd_cm": 100,
+      "entrance_field_cm": [
+        4,
+        4
+      ],
+      "phantom_cm": [
+        16,
+        16,
+        20
+      ],
+      "transport_spacing_cm": [
+        0.2,
+        2,
+        0.2
+      ],
+      "scoring_spacing_cm": [
+        0.2,
+        16,
+        0.2
+      ],
+      "spectral_preset": "varian-6mv",
+      "gpu_ecut_mev": 0.025,
+      "normalization": "MeV/g per emitted photon; no fitted scale",
+      "source": "Point at z=-100 cm, uniform aims on entrance square, no full treatment-head model"
+    },
+    "cases": {
+      "mono6": {
+        "total": {
+          "candidate_mean": 1.799863009186419,
+          "reference_mean": 1.7991200517947576,
+          "relative_difference_percent": 0.04129559841881125,
+          "ratio_sem_percent": 0.07037055612482072,
+          "welch_t": 0.5868733889685551,
+          "welch_df": 9.866631732474955,
+          "welch_two_sided_p": 0.5704722143034185
+        },
+        "depth_relative_rms_percent": 0.3085151165620455,
+        "depth_mean_signed_relative_percent": 0.0743391003044408,
+        "diagnostic_chi2": {
+          "value": 94.66220218545578,
+          "null_mean": 96.09598942071217,
+          "bins": 80,
+          "p": 0.5318697620978202,
+          "caveat": "Adjacent depth bins are correlated; p is diagnostic, not a covariance-calibrated equivalence proof."
+        },
+        "regional": {
+          "z2-4cm_central_8mm": {
+            "candidate_mean": 0.04099207461034389,
+            "reference_mean": 0.041258442040277635,
+            "relative_difference_percent": -0.6456070970244365,
+            "ratio_sem_percent": 0.4396530207501788,
+            "welch_t": -1.4621599253180066,
+            "welch_df": 12.642007753762712,
+            "welch_two_sided_p": 0.16810803485455317
+          },
+          "z2-4cm_core_3cm": {
+            "candidate_mean": 0.1414997662691761,
+            "reference_mean": 0.14226891680966663,
+            "relative_difference_percent": -0.5406314729446748,
+            "ratio_sem_percent": 0.1916326730720825,
+            "welch_t": -2.810077155247367,
+            "welch_df": 11.574273999700246,
+            "welch_two_sided_p": 0.016236304798466127
+          },
+          "z2-4cm_geometric_edge_band": {
+            "candidate_mean": 0.04571813568031279,
+            "reference_mean": 0.04581254004978012,
+            "relative_difference_percent": -0.20606665634507193,
+            "ratio_sem_percent": 0.3334354847129331,
+            "welch_t": -0.6176451923805484,
+            "welch_df": 11.851665212637068,
+            "welch_two_sided_p": 0.5484934665416927
+          },
+          "z8-10cm_central_8mm": {
+            "candidate_mean": 0.03467133208857608,
+            "reference_mean": 0.03482160061327787,
+            "relative_difference_percent": -0.4315382465344908,
+            "ratio_sem_percent": 0.31924010471234787,
+            "welch_t": -1.3476607040964572,
+            "welch_df": 11.995629103898366,
+            "welch_two_sided_p": 0.20266960474029505
+          },
+          "z8-10cm_core_3cm": {
+            "candidate_mean": 0.12024860643478968,
+            "reference_mean": 0.12043218388020283,
+            "relative_difference_percent": -0.15243221495987447,
+            "ratio_sem_percent": 0.18081582759788514,
+            "welch_t": -0.8425849395377737,
+            "welch_df": 12.73497846744434,
+            "welch_two_sided_p": 0.41500525729591714
+          },
+          "z8-10cm_geometric_edge_band": {
+            "candidate_mean": 0.03408076321687274,
+            "reference_mean": 0.034081444528304,
+            "relative_difference_percent": -0.001999068527425152,
+            "ratio_sem_percent": 0.4735194637990743,
+            "welch_t": -0.00422170431587444,
+            "welch_df": 10.917266141961871,
+            "welch_two_sided_p": 0.9967077325592028
+          }
+        },
+        "source_energy_mean_check": {
+          "constant_energy_mev": 6.0,
+          "verified": true
+        },
+        "mean_primary_energy_mev": {
+          "gpu": 6.0,
+          "topas": 6.0
+        },
+        "histories_per_backend": 8000000
+      },
+      "spectrum6mv": {
+        "total": {
+          "candidate_mean": 0.6377263409255882,
+          "reference_mean": 0.6355000731136808,
+          "relative_difference_percent": 0.3503174753386906,
+          "ratio_sem_percent": 0.0907865810649891,
+          "welch_t": 3.8627984297274076,
+          "welch_df": 12.125265839933691,
+          "welch_two_sided_p": 0.002215752515566754
+        },
+        "depth_relative_rms_percent": 0.6400344563872865,
+        "depth_mean_signed_relative_percent": 0.4118184778481017,
+        "diagnostic_chi2": {
+          "value": 166.98424592907318,
+          "null_mean": 95.56656711708851,
+          "bins": 80,
+          "p": 2.7181425180332642e-05,
+          "caveat": "Adjacent depth bins are correlated; p is diagnostic, not a covariance-calibrated equivalence proof."
+        },
+        "regional": {
+          "z2-4cm_central_8mm": {
+            "candidate_mean": 0.015217750690800008,
+            "reference_mean": 0.015141615979604754,
+            "relative_difference_percent": 0.5028176074324264,
+            "ratio_sem_percent": 0.5059166219682076,
+            "welch_t": 0.9955854797214743,
+            "welch_df": 12.7263020447855,
+            "welch_two_sided_p": 0.3380053911965805
+          },
+          "z2-4cm_core_3cm": {
+            "candidate_mean": 0.05283979587145769,
+            "reference_mean": 0.05274834927895007,
+            "relative_difference_percent": 0.17336389433539878,
+            "ratio_sem_percent": 0.31674424360386333,
+            "welch_t": 0.5479064112374479,
+            "welch_df": 13.393796860673461,
+            "welch_two_sided_p": 0.5927706042387593
+          },
+          "z2-4cm_geometric_edge_band": {
+            "candidate_mean": 0.017382023210161968,
+            "reference_mean": 0.017411338126416598,
+            "relative_difference_percent": -0.16836681960792355,
+            "ratio_sem_percent": 0.34177634197178863,
+            "welch_t": -0.4923268981750418,
+            "welch_df": 12.94085939151717,
+            "welch_two_sided_p": 0.6307350219649982
+          },
+          "z8-10cm_central_8mm": {
+            "candidate_mean": 0.011422193503561695,
+            "reference_mean": 0.011334226379981395,
+            "relative_difference_percent": 0.776119345345605,
+            "ratio_sem_percent": 0.5467278415859752,
+            "welch_t": 1.4219754559271727,
+            "welch_df": 10.612650191845729,
+            "welch_two_sided_p": 0.1837506707577663
+          },
+          "z8-10cm_core_3cm": {
+            "candidate_mean": 0.03965413595713645,
+            "reference_mean": 0.039457887592738584,
+            "relative_difference_percent": 0.4973615577788193,
+            "ratio_sem_percent": 0.271731913633178,
+            "welch_t": 1.8333492765665247,
+            "welch_df": 12.551002922389218,
+            "welch_two_sided_p": 0.09056538515511206
+          },
+          "z8-10cm_geometric_edge_band": {
+            "candidate_mean": 0.011464487586324162,
+            "reference_mean": 0.011479300613848817,
+            "relative_difference_percent": -0.12904120227310578,
+            "ratio_sem_percent": 0.49577046658030677,
+            "welch_t": -0.2602020809154329,
+            "welch_df": 11.101431755446072,
+            "welch_two_sided_p": 0.7994708513920845
+          }
+        },
+        "source_energy_mean_check": {
+          "candidate_mean": 1.6004646224504855,
+          "reference_mean": 1.6007699552901407,
+          "relative_difference_percent": -0.019074123589468694,
+          "ratio_sem_percent": 0.028716155759636267,
+          "welch_t": -0.6641815014866419,
+          "welch_df": 13.243116951229275,
+          "welch_two_sided_p": 0.5179717600968083
+        },
+        "mean_primary_energy_mev": {
+          "gpu": 1.6004646224504855,
+          "topas": 1.6007699552901407
+        },
+        "histories_per_backend": 8000000
+      }
+    }
+  }
+}

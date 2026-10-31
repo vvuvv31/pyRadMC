@@ -22,7 +22,7 @@ from pyradmc.geometry.grid import VoxelGrid
 from pyradmc.geometry.source import ParallelBeamSource
 from pyradmc.rng.host import HostRNG
 from tests.conftest import SEED, assert_chi2_consistent_batched
-from tests.unit.test_tabulated_source import _two_material_tables
+from tests.unit.test_tabulated_source import DELTA_CUT, _two_material_tables
 
 SHAPE = (8, 8, 16)
 SPACING = (2.0, 2.0, 1.0)
@@ -62,6 +62,7 @@ def test_material_row_reaches_the_reference_transport() -> None:
         n_batches=8,
         seed=SEED,
         transport_electrons=False,
+        ecut=DELTA_CUT,  # Synthetic tables intentionally retain their declared restriction.
     )
     pdd = result.dose.sum(axis=(0, 1))
     in_slab = pdd[SLAB].mean()
@@ -83,10 +84,20 @@ def test_heterogeneous_dose_agrees_across_backends() -> None:
     source = ParallelBeamSource(energy=2.0, z=-1.0, x_range=(0.0, 16.0), y_range=(0.0, 16.0))
 
     ref = ReferenceEngine(grid=grid, cross_sections=_source_for(grid), rng=HostRNG()).run(
-        source, n_histories=6_000, n_batches=12, seed=SEED, transport_electrons=False
+        source,
+        n_histories=6_000,
+        n_batches=12,
+        seed=SEED,
+        transport_electrons=False,
+        ecut=DELTA_CUT,
     )
     warp = WarpEngine(grid=grid, cross_sections=_source_for(grid), device="cpu").run(
-        source, n_histories=24_000, n_batches=12, seed=SEED, transport_electrons=False
+        source,
+        n_histories=24_000,
+        n_batches=12,
+        seed=SEED,
+        transport_electrons=False,
+        ecut=DELTA_CUT,
     )
     mask = ref.dose > 0.1 * ref.dose.max()
     mask &= (ref.dose_sigma > 0.0) & (warp.dose_sigma > 0.0)

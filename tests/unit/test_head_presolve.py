@@ -12,6 +12,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from pyradmc import ECUT_MEV
 from pyradmc.data.analytic import AnalyticCrossSections
 from pyradmc.data.materials import WATER
 from pyradmc.geometry.collimation import BeamFrame, BeamLimitingStack, JawPair
@@ -251,7 +252,7 @@ class TestFirstComptonMode:
         kinds = set(np.unique(out["particle_type"]))
         assert kinds == {1, 2}
         electrons = out["particle_type"] == 2
-        assert np.all(out["energy"][electrons] >= 0.2 - 1e-9)  # ECUT
+        assert np.all(out["energy"][electrons] >= ECUT_MEV - 1e-9)
         assert np.all(out["uz"][electrons] > 0.0)
 
 

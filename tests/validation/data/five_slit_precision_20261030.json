@@ -1,0 +1,129 @@
+{
+  "configuration": {
+    "thickness_cm": 10.0,
+    "n_slits": 5,
+    "slit_width_cm": 0.05,
+    "slit_pitch_cm": 0.2,
+    "slit_centers_cm": [
+      -0.4,
+      -0.2,
+      0.0,
+      0.2,
+      0.4
+    ],
+    "air_origin_z_cm": -12.0,
+    "exit_to_water_cm": 1,
+    "transport_shape": [
+      6404,
+      8,
+      160
+    ],
+    "transport_spacing_cm": [
+      0.0025,
+      2.0,
+      0.2
+    ],
+    "scoring_shape": [
+      161,
+      32,
+      1
+    ],
+    "scoring_spacing_cm": [
+      0.01,
+      0.5,
+      2.0
+    ],
+    "source": "Ali Rogers varian-6mv ideal point z=-100 cm, uniform aiming square 4x4 cm at z=0",
+    "brass": "experimental Cu70/Zn30 mass fractions, 8.5 g/cm3; EPDL/EEDL; G4 mixture I and density effect; not independently material-validated",
+    "normalization": "absolute MeV/g per emitted photon; no rescaling",
+    "cutoffs_mev": {
+      "electron": 0.025,
+      "photon": 0.05
+    },
+    "uncertainty": "128 independent 10000000-history batches; SEM after within-batch ROI integration; open-slit only",
+    "scoring_origin_cm": [
+      -0.805,
+      -8.0,
+      2.0
+    ],
+    "note": "Dose cross section averaged over water depth 2\u20134 cm; x=0.1 mm, y=5 mm; production defaults unchanged",
+    "legacy_template_uncertainty": "independent 1M-history chunks; paired open/closed chunks within backend",
+    "scored_energy_note": "water_deposited in per-batch records is energy in the cropped scoring slab, not all water"
+  },
+  "histories": 1280000000,
+  "independent_batches": 128,
+  "histories_per_batch": 10000000,
+  "precision": {
+    "definition": "Estimated relative 1-sigma standard error of mean dose, from independent batches; not a systematic-accuracy bound or simultaneous confidence interval.",
+    "roi": "Centers |x|<=6 mm and |y|<=20 mm; 121x8 bins; no dose-threshold exclusion; all five peaks and valleys included; depth 2\u20134 cm averaged.",
+    "roi_voxels": 968,
+    "max_relative_sem_percent": 0.8451275920989263,
+    "median_relative_sem_percent": 0.49396474360555737,
+    "p95_relative_sem_percent": 0.7130875045022604,
+    "profile_max_relative_sem_percent": 0.28492733071111737,
+    "outside_roi": "No <1% claim outside the predeclared ROI. No smoothing or data clipping."
+  },
+  "peak_centers_mm": [
+    -4.380802406083305,
+    -2.183094994892748,
+    0.0,
+    2.183094994892748,
+    4.380802406083305
+  ],
+  "fixed_peak_window_mm": 0.3,
+  "fixed_valley_window_mm": 0.3,
+  "peak_doses_MeV_g_per_incident_photon": [
+    {
+      "mean": 0.0005923657918718966,
+      "sem": 7.084664855887055e-07,
+      "relative_sem_percent": 0.11959949330462291
+    },
+    {
+      "mean": 0.0008220069588147755,
+      "sem": 9.216216387326612e-07,
+      "relative_sem_percent": 0.11211847160777284
+    },
+    {
+      "mean": 0.0009311281536947644,
+      "sem": 9.515518467793714e-07,
+      "relative_sem_percent": 0.10219343524342644
+    },
+    {
+      "mean": 0.0008218261341901659,
+      "sem": 8.210493719905865e-07,
+      "relative_sem_percent": 0.09990548339031043
+    },
+    {
+      "mean": 0.0005946746024465297,
+      "sem": 8.344535163357642e-07,
+      "relative_sem_percent": 0.14032102815603165
+    }
+  ],
+  "central_pvdr": {
+    "ratio": 2.495306475200299,
+    "sem": 0.0034203234840527097
+  },
+  "full_y_16cm_central_pvdr": {
+    "ratio": 2.336963121129931,
+    "sem": 0.003232107352804762
+  },
+  "mean_outer_to_central_peak_ratio": {
+    "ratio": 0.637420525632368,
+    "sem": 0.0008872741618276466
+  },
+  "provenance": {
+    "seed_formula": "3510031+137*batch (distinct from pilot seeds)",
+    "pilot_histories_excluded": 64000000,
+    "normalization": "Per primary upstream of the collimator, not per transmitted photon",
+    "code_commit": "6e505c28ad3ce9a628a5f18140e5743cff5c6f33 with working-tree cutoff/endpoint fixes",
+    "material_profile": "Experimental Cu70/Zn30; no new transport changes in this study",
+    "sha256": {
+      "pyradmc/__init__.py": "395687eb299b390065f4af6d1148026f8aa7cd7eaf93d9e108fb3c3d967a46cd",
+      "pyradmc/backends/warp/kernels.py": "b0990ccfedec00a32b860dd2dba86660feec3ebae34989c00b50b2d3fee3b9a5",
+      "pyradmc/physics/brems.py": "4b83afd2c0e3b0f1abbdfbb7f2a80e4cc31ab7cecd066e33269f603728ca8064",
+      "pyradmc/physics/compton.py": "52774034c38962a023ddddf478ffb82f18083e924abf5ccd1df5fe65b11f0d33",
+      "pyradmc/transport/electron.py": "a8e5a53a857d8d5b9e3069e514cdd866fb70386d80699baea8cb68016608dbbd",
+      "local_minibeam_diagnosis_20261030/materials_ecut0025.npz": "58031648f7d7f9889b3343dede8a9305cce6c26512443b4aaa70cec1fa6696ef"
+    }
+  }
+}

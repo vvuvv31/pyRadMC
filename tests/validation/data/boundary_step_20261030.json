@@ -1,0 +1,2859 @@
+{
+  "steps": {
+    "method": "ECUT=25 keV fixed, same rebuilt experimental material table and source seeds; steps 0.2/0.05/0.0125 are existing diagnostic instruments. Single slit 32M/case, thick multi-slit 16M/configuration. \u00b11 SEM after batch ROI integration; FWHM bootstrap SD. Step changes affect all materials and physics, not a boundary-only intervention.",
+    "single": {
+      "0-0.4cm": {
+        "0.2": {
+          "central_dose": {
+            "mean": 0.00046478845199861984,
+            "sem": 3.337035160997524e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.579986704807768,
+            "bootstrap_sd_mm": 0.008682028594246735,
+            "bootstrap_percentile95_mm": [
+              0.563814379869932,
+              0.5984260291106199
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.0
+          }
+        },
+        "0.05": {
+          "central_dose": {
+            "mean": 0.00046351439160194016,
+            "sem": 3.946725969152013e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": -0.27411619010780264,
+            "sem": 0.5958093178613701
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.5881114552320653,
+            "bootstrap_sd_mm": 0.009908009994692471,
+            "bootstrap_percentile95_mm": [
+              0.5716496010173894,
+              0.6102969359886296
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": -0.0665929683926545,
+            "sem": 1.0000534857002734
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.2906299223224684,
+            "sem": 0.07065240588934958
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.008124750424297278,
+            "bootstrap_sd": 0.008315637597938628,
+            "bootstrap_percentile95": [
+              -0.007665530472035995,
+              0.02598347471454124
+            ]
+          }
+        },
+        "0.0125": {
+          "central_dose": {
+            "mean": 0.0004651577653109245,
+            "sem": 3.6849223607929214e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.07945836664328476,
+            "sem": 0.7085155962400284
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.579682641576347,
+            "bootstrap_sd_mm": 0.008061248660935907,
+            "bootstrap_percentile95_mm": [
+              0.5650997180333275,
+              0.5966960935305062
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": 1.064276901066742,
+            "sem": 1.121869350511778
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.32467843960450826,
+            "sem": 0.08120518717597427
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": -0.00030406323142107006,
+            "bootstrap_sd": 0.008543867920592998,
+            "bootstrap_percentile95": [
+              -0.01816988982327819,
+              0.015432567011868042
+            ]
+          }
+        },
+        "finest_vs_middle_percent": {
+          "mean": 0.3545464259059442,
+          "sem": 0.6960088415508393
+        }
+      },
+      "2-4cm": {
+        "0.2": {
+          "central_dose": {
+            "mean": 0.00043807816526438123,
+            "sem": 2.114524827671668e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.6825521806221679,
+            "bootstrap_sd_mm": 0.007926590848561127,
+            "bootstrap_percentile95_mm": [
+              0.66714455093896,
+              0.697913528618969
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.0
+          }
+        },
+        "0.05": {
+          "central_dose": {
+            "mean": 0.0004366717634117055,
+            "sem": 2.2929167185527995e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": -0.3210390209306455,
+            "sem": 0.23900068562146376
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.6891286702422048,
+            "bootstrap_sd_mm": 0.007079236883807584,
+            "bootstrap_percentile95_mm": [
+              0.6751536713778044,
+              0.7032804562327278
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": -1.1021555984836509,
+            "sem": 0.3207727472534462
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.2906299223224684,
+            "sem": 0.07065240588934958
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.006576489620036874,
+            "bootstrap_sd": 0.006542623638500894,
+            "bootstrap_percentile95": [
+              -0.0062865306107629275,
+              0.019078589152760287
+            ]
+          }
+        },
+        "0.0125": {
+          "central_dose": {
+            "mean": 0.0004372683769321156,
+            "sem": 2.1076709063707945e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": -0.1848501926081788,
+            "sem": 0.3374905516369155
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7014268382257345,
+            "bootstrap_sd_mm": 0.008293899488631403,
+            "bootstrap_percentile95_mm": [
+              0.6846861827629941,
+              0.7170893033841844
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": -0.942523187221203,
+            "sem": 0.6048337330772082
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.32467843960450826,
+            "sem": 0.08120518717597427
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.018874657603566547,
+            "bootstrap_sd": 0.007811241216071266,
+            "bootstrap_percentile95": [
+              0.004053946114723419,
+              0.03419626733866614
+            ]
+          }
+        },
+        "finest_vs_middle_percent": {
+          "mean": 0.1366274557687893,
+          "sem": 0.30502434475073825
+        }
+      },
+      "8-10cm": {
+        "0.2": {
+          "central_dose": {
+            "mean": 0.00030318293118987557,
+            "sem": 1.648930451057264e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7389068339575597,
+            "bootstrap_sd_mm": 0.007700876320983776,
+            "bootstrap_percentile95_mm": [
+              0.7216757352923587,
+              0.7513633328214882
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.0
+          }
+        },
+        "0.05": {
+          "central_dose": {
+            "mean": 0.0003033885307043092,
+            "sem": 1.4450672335298445e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.06781368384647707,
+            "sem": 0.37188795716414097
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7453365090522623,
+            "bootstrap_sd_mm": 0.007801593002394426,
+            "bootstrap_percentile95_mm": [
+              0.7278923622000447,
+              0.7584093928818185
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": -0.9129364965151162,
+            "sem": 0.473114987620679
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.2906299223224684,
+            "sem": 0.07065240588934958
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.006429675094702603,
+            "bootstrap_sd": 0.006858956226871612,
+            "bootstrap_percentile95": [
+              -0.0071594833046286525,
+              0.020450762163926064
+            ]
+          }
+        },
+        "0.0125": {
+          "central_dose": {
+            "mean": 0.0003035999000518482,
+            "sem": 1.316854240203195e-06
+          },
+          "response_vs_step02_percent": {
+            "mean": 0.13753045408465336,
+            "sem": 0.42580413550245916
+          },
+          "paired_excess_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7472229991615655,
+            "bootstrap_sd_mm": 0.006698698366647749,
+            "bootstrap_percentile95_mm": [
+              0.7329620942285816,
+              0.7594444750159973
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "central_excess_response_percent": {
+            "mean": -1.487831252905223,
+            "sem": 0.6228484931271533
+          },
+          "total_water_excess_response_percent": {
+            "mean": 0.32467843960450826,
+            "sem": 0.08120518717597427
+          },
+          "paired_fwhm_change_mm": {
+            "mean_profile_difference": 0.008316165204005799,
+            "bootstrap_sd": 0.008590833558165645,
+            "bootstrap_percentile95": [
+              -0.007750778242248818,
+              0.02532775754808259
+            ]
+          }
+        },
+        "finest_vs_middle_percent": {
+          "mean": 0.06966952476691352,
+          "sem": 0.4029954912451097
+        }
+      }
+    },
+    "multi": {
+      "3": {
+        "0-0.4cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.00022881324676985143,
+              "sem": 3.647762864807304e-06
+            },
+            "pvdr": {
+              "mean": 3.072820768136976,
+              "sem": 0.08281927599075029
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.0002285421167975207,
+              "sem": 4.147089020665983e-06
+            },
+            "pvdr": {
+              "mean": 3.102010739841103,
+              "sem": 0.07340682207749494
+            },
+            "dose_response_percent": {
+              "mean": -0.11849400161846735,
+              "sem": 1.2563505456037978
+            },
+            "pvdr_response_percent": {
+              "mean": 0.9499405890121178,
+              "sem": 2.6267695197996086
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.00023240299491145293,
+              "sem": 3.4182165123383095e-06
+            },
+            "pvdr": {
+              "mean": 3.082845390818938,
+              "sem": 0.06770940383324009
+            },
+            "dose_response_percent": {
+              "mean": 1.5688550345217624,
+              "sem": 1.6397096819612762
+            },
+            "pvdr_response_percent": {
+              "mean": 0.32623519034726,
+              "sem": 2.0728505988994064
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": 1.6893508155229178,
+              "sem": 1.3363808453184909
+            },
+            "pvdr": {
+              "mean": -0.6178363206810495,
+              "sem": 2.807204938457656
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 3.266012704077027,
+            "sem": 0.09628571772392866,
+            "relative_sem_percent": 2.9481121614662835
+          }
+        },
+        "2-4cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.00024326099167271454,
+              "sem": 2.8159836487047566e-06
+            },
+            "pvdr": {
+              "mean": 2.4842682205567153,
+              "sem": 0.028882290643087196
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.00024169258774530577,
+              "sem": 2.5859880589178716e-06
+            },
+            "pvdr": {
+              "mean": 2.4327001227883303,
+              "sem": 0.025550838754230715
+            },
+            "dose_response_percent": {
+              "mean": -0.6447412372300577,
+              "sem": 0.5634956078138358
+            },
+            "pvdr_response_percent": {
+              "mean": -2.0757862352249687,
+              "sem": 1.123721539772527
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.0002445490595139254,
+              "sem": 2.5699530775087203e-06
+            },
+            "pvdr": {
+              "mean": 2.503665291246027,
+              "sem": 0.03486783955213257
+            },
+            "dose_response_percent": {
+              "mean": 0.5295003659871025,
+              "sem": 0.5445767727966309
+            },
+            "pvdr_response_percent": {
+              "mean": 0.7807961527183762,
+              "sem": 1.85194702845167
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": 1.1818615520099354,
+              "sem": 0.6983880609426063
+            },
+            "pvdr": {
+              "mean": 2.917135893278834,
+              "sem": 1.444999208802986
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 2.4425517982922953,
+            "sem": 0.03781136132306859,
+            "relative_sem_percent": 1.5480269998574572
+          }
+        },
+        "8-10cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.0001670635150223272,
+              "sem": 1.8077859129141061e-06
+            },
+            "pvdr": {
+              "mean": 2.4170106908289206,
+              "sem": 0.0313176421722836
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.00016653418146399393,
+              "sem": 1.633217308867658e-06
+            },
+            "pvdr": {
+              "mean": 2.4405001952430005,
+              "sem": 0.025174083273351074
+            },
+            "dose_response_percent": {
+              "mean": -0.3168456968372485,
+              "sem": 0.595033831387027
+            },
+            "pvdr_response_percent": {
+              "mean": 0.9718411467193204,
+              "sem": 1.0957187915313087
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.00016626873584081681,
+              "sem": 1.7109909741373012e-06
+            },
+            "pvdr": {
+              "mean": 2.477692215930688,
+              "sem": 0.03804525054267598
+            },
+            "dose_response_percent": {
+              "mean": -0.47573474160661955,
+              "sem": 0.8823345444413051
+            },
+            "pvdr_response_percent": {
+              "mean": 2.510602263035776,
+              "sem": 1.75809102378154
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": -0.15939407804667527,
+              "sem": 0.5749646379469474
+            },
+            "pvdr": {
+              "mean": 1.523950736008196,
+              "sem": 1.4255959606683857
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 2.4039344410151893,
+            "sem": 0.03274205251980057,
+            "relative_sem_percent": 1.362019361308934
+          }
+        }
+      },
+      "5": {
+        "0-0.4cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.00023977012648306728,
+              "sem": 3.246357904287741e-06
+            },
+            "pvdr": {
+              "mean": 2.800625554987117,
+              "sem": 0.0662747714229388
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.00024036866527440842,
+              "sem": 3.653312373298738e-06
+            },
+            "pvdr": {
+              "mean": 2.814762030181713,
+              "sem": 0.07118888758942792
+            },
+            "dose_response_percent": {
+              "mean": 0.24963026050010584,
+              "sem": 1.4037483349552875
+            },
+            "pvdr_response_percent": {
+              "mean": 0.5047613441012622,
+              "sem": 2.916661212405644
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.00024529875803091876,
+              "sem": 3.459348232466891e-06
+            },
+            "pvdr": {
+              "mean": 2.805174470897054,
+              "sem": 0.06576682532163643
+            },
+            "dose_response_percent": {
+              "mean": 2.305804992867582,
+              "sem": 1.665884808370017
+            },
+            "pvdr_response_percent": {
+              "mean": 0.16242499472437277,
+              "sem": 2.0160331523825956
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": 2.0510546792287174,
+              "sem": 1.4911326808055179
+            },
+            "pvdr": {
+              "mean": -0.34061704619627164,
+              "sem": 2.9078031312733588
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 2.907950788138461,
+            "sem": 0.08633654916446634,
+            "relative_sem_percent": 2.968982470976928
+          }
+        },
+        "2-4cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.00024994703759439405,
+              "sem": 2.787963060202706e-06
+            },
+            "pvdr": {
+              "mean": 2.360856796206768,
+              "sem": 0.024860369714362864
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.00024865762328749307,
+              "sem": 2.6239487795242626e-06
+            },
+            "pvdr": {
+              "mean": 2.3107827025320917,
+              "sem": 0.023899181913891093
+            },
+            "dose_response_percent": {
+              "mean": -0.5158750106866281,
+              "sem": 0.5774535128034984
+            },
+            "pvdr_response_percent": {
+              "mean": -2.1210135979078037,
+              "sem": 1.0533664531005653
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.0002520748607993419,
+              "sem": 2.626843969516441e-06
+            },
+            "pvdr": {
+              "mean": 2.3948750039381586,
+              "sem": 0.030725243014228236
+            },
+            "dose_response_percent": {
+              "mean": 0.8513096316031485,
+              "sem": 0.5396366613846151
+            },
+            "pvdr_response_percent": {
+              "mean": 1.4409263529261311,
+              "sem": 1.5868836950247502
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": 1.3742741793594102,
+              "sem": 0.7021007622084473
+            },
+            "pvdr": {
+              "mean": 3.6391263148162283,
+              "sem": 1.2663154019364469
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 2.342605983078538,
+            "sem": 0.03197164744263574,
+            "relative_sem_percent": 1.3647897970712157
+          }
+        },
+        "8-10cm": {
+          "0.2": {
+            "peak": {
+              "mean": 0.0001726071547550094,
+              "sem": 1.8103320066716036e-06
+            },
+            "pvdr": {
+              "mean": 2.306003435658856,
+              "sem": 0.028743414100737587
+            },
+            "dose_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            },
+            "pvdr_response_percent": {
+              "mean": 0.0,
+              "sem": 0.0
+            }
+          },
+          "0.05": {
+            "peak": {
+              "mean": 0.0001716851827869105,
+              "sem": 1.6680585508678026e-06
+            },
+            "pvdr": {
+              "mean": 2.322325347971704,
+              "sem": 0.026168489769298767
+            },
+            "dose_response_percent": {
+              "mean": -0.5341446995100018,
+              "sem": 0.5216889030578374
+            },
+            "pvdr_response_percent": {
+              "mean": 0.707800867095599,
+              "sem": 1.0690919508105772
+            }
+          },
+          "0.0125": {
+            "peak": {
+              "mean": 0.00017148882268469692,
+              "sem": 1.7539949412236288e-06
+            },
+            "pvdr": {
+              "mean": 2.361182385073459,
+              "sem": 0.03808533743716529
+            },
+            "dose_response_percent": {
+              "mean": -0.6479059757979315,
+              "sem": 0.874835398087594
+            },
+            "pvdr_response_percent": {
+              "mean": 2.392838994137798,
+              "sem": 1.7121595777987053
+            }
+          },
+          "finest_vs_middle": {
+            "peak": {
+              "mean": -0.11437218927465401,
+              "sem": 0.5597146487491306
+            },
+            "pvdr": {
+              "mean": 1.6731952366489953,
+              "sem": 1.3912414406239733
+            }
+          },
+          "TOPAS_pvdr": {
+            "mean": 2.289307017762012,
+            "sem": 0.027666022661572982,
+            "relative_sem_percent": 1.2084889639930787
+          }
+        }
+      }
+    }
+  },
+  "surface_16M": {
+    "method": "16 independent 1M-history chunks per step/case; same seeds and transport data. Passive first/second electron-segment interpolation at z=-1 and 0 cm; photon energy constant during each flight. Rows include repeated forward/reverse crossings, not independent particles. Marginal spectra cannot be replayed. Total counts are statistical-weighted currents through a finite 16.01x16 cm plane, not 1/cos fluence. Charged energies are kinetic only. Dose arrays agree bit-for-bit with uninstrumented transport for every batch.",
+    "planes": {
+      "-1": {
+        "photon": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6780005625,
+                "sem": 0.00011046933845906091
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9998340967470056,
+                "sem": 0.0002749766487087773
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0673011875,
+                "sem": 9.430483456810001e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6783728124999999,
+                "sem": 0.0001237294837791267
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 1.0000112201387314,
+                "sem": 0.00028092437829723766
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.067411375,
+                "sem": 9.124353287585188e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.054904084242552054,
+                "sem": 0.008990950510009756
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.017715278194861503,
+                "sem": 0.002406905491895256
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.678438125,
+                "sem": 0.00012977229657493982
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 1.000065725537175,
+                "sem": 0.0002702416797198684
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.06743493750000001,
+                "sem": 9.0962467935499e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.06453718834488258,
+                "sem": 0.012042749839583441
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.02316672245157256,
+                "sem": 0.0029023713798935896
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6723721874999999,
+                "sem": 0.00013166989084923954
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9910725620290178,
+                "sem": 0.00027715502459161706
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.066762125,
+                "sem": 9.910343397178507e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6727340625,
+                "sem": 0.00014151061411162808
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9912509887115051,
+                "sem": 0.0002835135963995792
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0668555625,
+                "sem": 9.830098205469096e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.05382063784427602,
+                "sem": 0.009045077776506606
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.018003392417807046,
+                "sem": 0.0023728165505581414
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6728026874999999,
+                "sem": 0.00014154592066269517
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9913079586202704,
+                "sem": 0.0002710401149559175
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.06688712499999999,
+                "sem": 9.548511555036557e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.06402703859608908,
+                "sem": 0.011974044403549383
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.023751700962308532,
+                "sem": 0.0028229168407350215
+              }
+            }
+          }
+        },
+        "electron": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0049298125,
+                "sem": 1.8089181562009194e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005714510272843563,
+                "sem": 2.1679244992512138e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0009043125,
+                "sem": 8.881966162774246e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048659375000000005,
+                "sem": 1.4782441372001685e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005681662635606625,
+                "sem": 1.5420762655769014e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008626875,
+                "sem": 6.012292096197586e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -1.2956882234364855,
+                "sem": 0.2634602332419328
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.5748110628663237,
+                "sem": 0.21604877548708382
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048274375,
+                "sem": 2.1433223577349864e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005683485368806187,
+                "sem": 1.7810668299291975e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008201875,
+                "sem": 5.347288058757762e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -2.076650988247522,
+                "sem": 0.3475785897592162
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.5429144853376349,
+                "sem": 0.2645726862239899
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.004932375000000001,
+                "sem": 1.8235010967915548e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005727967619682563,
+                "sem": 2.181750426418882e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0009051875000000001,
+                "sem": 8.391572533401195e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048646875,
+                "sem": 1.580261548763367e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00568622411726625,
+                "sem": 1.5148019178470357e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008653125,
+                "sem": 6.353292289566622e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -1.3723104995058188,
+                "sem": 0.27666259954192485
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.7287663825625068,
+                "sem": 0.20741803446752682
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048223125,
+                "sem": 2.0806192737980656e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005686338627694312,
+                "sem": 1.7160031479136496e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.00081925,
+                "sem": 5.142551247516482e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -2.2314300919942243,
+                "sem": 0.34406208598864213
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.726767236693229,
+                "sem": 0.25903599839154096
+              }
+            }
+          }
+        },
+        "positron": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0002455,
+                "sem": 3.5296364307578966e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034492110061525,
+                "sem": 5.461111537973716e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3e-05,
+                "sem": 1.2942179105544786e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.00024575000000000004,
+                "sem": 3.119161212035483e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.0003464963454758125,
+                "sem": 4.048808891086435e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 2.94375e-05,
+                "sem": 1.5026885627656407e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.10183299389002087,
+                "sem": 1.077378316850421
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.4566971570462535,
+                "sem": 0.8463493615717079
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.000244875,
+                "sem": 4.270904470952259e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.0003455515023415625,
+                "sem": 6.589286729300648e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.00625e-05,
+                "sem": 1.4007996228345198e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.2545824847250495,
+                "sem": 1.3452622852543055
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.18276693573922148,
+                "sem": 1.256938845843743
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0002458125,
+                "sem": 3.2044484054722e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034524262213,
+                "sem": 5.082597822477315e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 2.98125e-05,
+                "sem": 1.3140863429267754e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0002455625,
+                "sem": 3.0358534631961414e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034604354711406253,
+                "sem": 3.9709385492820225e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 2.9187499999999998e-05,
+                "sem": 1.5470906836166177e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.10170353419781297,
+                "sem": 0.968055248149773
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.2319890224217207,
+                "sem": 0.7612750763083247
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.000244125,
+                "sem": 4.1511795512440406e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.0003445873960121875,
+                "sem": 6.2939746541432815e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 2.95e-05,
+                "sem": 1.3693063937629153e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.686498855835243,
+                "sem": 1.3618245010721943
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.18978714556448362,
+                "sem": 1.1706069296590276
+              }
+            }
+          }
+        }
+      },
+      "0": {
+        "photon": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6740975625000001,
+                "sem": 0.00010449098720104849
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9984702707134941,
+                "sem": 0.0002762337024235694
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.07593056249999999,
+                "sem": 0.00010084930873792209
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.674468625,
+                "sem": 0.00011961333102264812
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9986480925118104,
+                "sem": 0.0002812069706515067
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0760336875,
+                "sem": 9.13389620566345e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.055045815419341886,
+                "sem": 0.008423420728621265
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.017809423428213178,
+                "sem": 0.0023045069770148197
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.674539875,
+                "sem": 0.00012449330219600982
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9987058298332022,
+                "sem": 0.00027085206491475475
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.07604268750000001,
+                "sem": 9.356164272597657e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.06561550205872564,
+                "sem": 0.011645960153395342
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.023592001346193173,
+                "sem": 0.002691534023030638
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6684646249999999,
+                "sem": 0.00012287805184409253
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9897055838972195,
+                "sem": 0.00027878682586827524
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0753355625,
+                "sem": 0.00010120424763607148
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6688235625,
+                "sem": 0.00013621630986382022
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9898840579141792,
+                "sem": 0.0002841002403977106
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.07541775,
+                "sem": 9.612359665208829e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.05369581075438515,
+                "sem": 0.008673122104814636
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.018033041326981886,
+                "sem": 0.0022980987551654707
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.6688985000000001,
+                "sem": 0.00013358265231683053
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.9899453877637966,
+                "sem": 0.00027183124995334317
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0754371875,
+                "sem": 9.423535336017273e-05
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.06490620202976236,
+                "sem": 0.011554101029135675
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.02422981849135961,
+                "sem": 0.0026564551010924285
+              }
+            }
+          }
+        },
+        "electron": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048135,
+                "sem": 1.7759035259082455e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005652890309674688,
+                "sem": 2.1250156855253214e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.000858125,
+                "sem": 8.292001668274478e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0047796875,
+                "sem": 1.3995153551021398e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005633888711070938,
+                "sem": 1.5670615865217328e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008483125,
+                "sem": 7.100891229275379e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.7024514386620948,
+                "sem": 0.29821949898632005
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.3361395244345966,
+                "sem": 0.21347283526112534
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.004766875,
+                "sem": 2.1184285646047457e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005642428370040125,
+                "sem": 1.713488482589642e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008343125,
+                "sem": 6.5521744164310365e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.9686298950867354,
+                "sem": 0.2956982102939219
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.18507239768401798,
+                "sem": 0.26010982524277515
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0048169375,
+                "sem": 1.7877236165488978e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005665929791233687,
+                "sem": 2.1526567349006405e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.0008585,
+                "sem": 8.010930033398118e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0047783125000000004,
+                "sem": 1.4730840310382861e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005637374988177625,
+                "sem": 1.550866859374521e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.000849375,
+                "sem": 7.250790186823319e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.8018580270140515,
+                "sem": 0.318380665083053
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.5039738243887577,
+                "sem": 0.20383980386287978
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0047618750000000005,
+                "sem": 2.0312326922339543e-05
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.005644665554166875,
+                "sem": 1.6944130262184854e-05
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 0.000834,
+                "sem": 6.317304277406099e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -1.1431018152093522,
+                "sem": 0.2894242629452591
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.37530004518785853,
+                "sem": 0.2514902499592214
+              }
+            }
+          }
+        },
+        "positron": {
+          "slit": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.00024231250000000001,
+                "sem": 3.7613370295680773e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.0003418616206301875,
+                "sem": 5.509116844175121e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.1e-05,
+                "sem": 1.2909944487358056e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.000241875,
+                "sem": 3.1686945261416422e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034197768822325,
+                "sem": 4.2375409506691325e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.0125e-05,
+                "sem": 1.4343262065048754e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.18055197317513427,
+                "sem": 1.1757258583289687
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.033951630150391376,
+                "sem": 0.8565042369384124
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.00024225,
+                "sem": 4.368924352744048e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034280623563125005,
+                "sem": 6.496715292402054e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.1375000000000004e-05,
+                "sem": 1.6479153497676999e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.02579313902501995,
+                "sem": 1.4431716518154396
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.2763150187263462,
+                "sem": 1.2191304178864342
+              }
+            }
+          },
+          "closed": {
+            "0.2": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.0002428125,
+                "sem": 3.3828227241954803e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034228287720443747,
+                "sem": 5.1599470716303896e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.08125e-05,
+                "sem": 1.3109117374306071e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "0.05": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.00024168749999999999,
+                "sem": 3.1087494136174218e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.000341529986528375,
+                "sem": 4.2021332090032116e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 2.9874999999999998e-05,
+                "sem": 1.4487782208928091e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.4633204633204637,
+                "sem": 1.091490406362522
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.2199615365546954,
+                "sem": 0.8109799971217422
+              }
+            },
+            "0.0125": {
+              "forward_weighted_count_per_primary": {
+                "mean": 0.00024150000000000002,
+                "sem": 4.284662569366849e-06
+              },
+              "forward_kinetic_energy_MeV_per_primary": {
+                "mean": 0.00034191490730306245,
+                "sem": 6.23879406760609e-06
+              },
+              "reverse_weighted_count_per_primary": {
+                "mean": 3.0625e-05,
+                "sem": 1.6147110164567118e-06
+              },
+              "count_response_vs_step02_percent": {
+                "mean": -0.5405405405405397,
+                "sem": 1.4334367430897457
+              },
+              "energy_response_vs_step02_percent": {
+                "mean": -0.10750461851330928,
+                "sem": 1.1351174542837783
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "surface_64M": {
+    "method": "64M per step, slit only, same paired batch seeds; 25 keV cutoff fixed; passive surface scorer. All 64 default batches and first 32 finest batches are dose-bit-identical to uninstrumented runs. Crossing counts include repeated crossings; energies for charged particles are kinetic. Central band |x|<0.25 mm, full y. SEM after within-batch region integration.",
+    "planes": {
+      "-1": {
+        "photon": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.6782045156250001,
+                "sem": 7.557375442067043e-05
+              },
+              "finest": {
+                "mean": 0.678576859375,
+                "sem": 7.90786348496011e-05
+              },
+              "response_percent": {
+                "mean": 0.054901396469892214,
+                "sem": 0.00534616972632486
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 1.0004039476786004,
+                "sem": 0.0001283694051599212
+              },
+              "finest": {
+                "mean": 1.0005950066087246,
+                "sem": 0.00012864679020740158
+              },
+              "response_percent": {
+                "mean": 0.019098178347616613,
+                "sem": 0.0014609025742079022
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 0.015778234375,
+                "sem": 1.7046457618957386e-05
+              },
+              "finest": {
+                "mean": 0.015781890625000003,
+                "sem": 1.7088633283378753e-05
+              },
+              "response_percent": {
+                "mean": 0.02317274489085399,
+                "sem": 0.023323584936969812
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.022807044571321124,
+                "sem": 2.9016180852674353e-05
+              },
+              "finest": {
+                "mean": 0.022809810344846,
+                "sem": 2.9242003364131482e-05
+              },
+              "response_percent": {
+                "mean": 0.012126838776615793,
+                "sem": 0.008474943829623532
+              }
+            }
+          }
+        },
+        "electron": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.004952609375,
+                "sem": 1.0086053774780701e-05
+              },
+              "finest": {
+                "mean": 0.004844890625000001,
+                "sem": 1.030591401498556e-05
+              },
+              "response_percent": {
+                "mean": -2.174989825439241,
+                "sem": 0.1685679487306835
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.005733500177503235,
+                "sem": 1.0877759712910619e-05
+              },
+              "finest": {
+                "mean": 0.00569254935281875,
+                "sem": 1.2322603338044404e-05
+              },
+              "response_percent": {
+                "mean": -0.714237785239194,
+                "sem": 0.12544467006259866
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 6.3171875e-05,
+                "sem": 9.565342034091967e-07
+              },
+              "finest": {
+                "mean": 7.059375e-05,
+                "sem": 1.0910255182843429e-06
+              },
+              "response_percent": {
+                "mean": 11.748701459312393,
+                "sem": 1.7242245527734983
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 6.515505775771876e-05,
+                "sem": 1.3816011646859995e-06
+              },
+              "finest": {
+                "mean": 7.978477724359375e-05,
+                "sem": 1.5878047003047584e-06
+              },
+              "response_percent": {
+                "mean": 22.45369736341283,
+                "sem": 2.6033376023911217
+              }
+            }
+          }
+        },
+        "positron": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.00024195312499999998,
+                "sem": 1.994962615452624e-06
+              },
+              "finest": {
+                "mean": 0.000240515625,
+                "sem": 1.8962410848138774e-06
+              },
+              "response_percent": {
+                "mean": -0.5941233451727487,
+                "sem": 0.5627011280488137
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.00033913891137153125,
+                "sem": 3.050331572227096e-06
+              },
+              "finest": {
+                "mean": 0.00033827469330346873,
+                "sem": 3.1063651030110595e-06
+              },
+              "response_percent": {
+                "mean": -0.2548271634674618,
+                "sem": 0.5638645725880381
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 2.6562499999999998e-06,
+                "sem": 1.7425970117150133e-07
+              },
+              "finest": {
+                "mean": 3.1562499999999996e-06,
+                "sem": 2.1271435267356392e-07
+              },
+              "response_percent": {
+                "mean": 18.82352941176471,
+                "sem": 9.742102014245
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 3.26465271025e-06,
+                "sem": 2.808644510610593e-07
+              },
+              "finest": {
+                "mean": 4.3003032369843756e-06,
+                "sem": 3.82907637244249e-07
+              },
+              "response_percent": {
+                "mean": 31.723145420116282,
+                "sem": 13.447846173816467
+              }
+            }
+          }
+        }
+      },
+      "0": {
+        "photon": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.674310328125,
+                "sem": 7.323470794481017e-05
+              },
+              "finest": {
+                "mean": 0.67469571875,
+                "sem": 7.559083896145066e-05
+              },
+              "response_percent": {
+                "mean": 0.05715330300095338,
+                "sem": 0.005290898079372034
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.9990335461633455,
+                "sem": 0.00012803883838452348
+              },
+              "finest": {
+                "mean": 0.9992335721499275,
+                "sem": 0.00012835062058709322
+              },
+              "response_percent": {
+                "mean": 0.02002194894756862,
+                "sem": 0.001440112251110596
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 0.01527234375,
+                "sem": 1.6100013228791538e-05
+              },
+              "finest": {
+                "mean": 0.015277843749999999,
+                "sem": 1.604391942669984e-05
+              },
+              "response_percent": {
+                "mean": 0.03601280910141902,
+                "sem": 0.022966835096733678
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.022486810564279737,
+                "sem": 2.927322039883807e-05
+              },
+              "finest": {
+                "mean": 0.022490483456606425,
+                "sem": 2.9475844117880566e-05
+              },
+              "response_percent": {
+                "mean": 0.01633354057121124,
+                "sem": 0.006803117739504576
+              }
+            }
+          }
+        },
+        "electron": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.00482828125,
+                "sem": 9.239281347402956e-06
+              },
+              "finest": {
+                "mean": 0.004781875,
+                "sem": 1.0039888204493622e-05
+              },
+              "response_percent": {
+                "mean": -0.9611339438853113,
+                "sem": 0.158178953705456
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.005674060410822391,
+                "sem": 1.0755504168090708e-05
+              },
+              "finest": {
+                "mean": 0.005651800909238891,
+                "sem": 1.2106680607398262e-05
+              },
+              "response_percent": {
+                "mean": -0.39230286552895033,
+                "sem": 0.12447211261429342
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 5.5234375e-05,
+                "sem": 9.79639497665802e-07
+              },
+              "finest": {
+                "mean": 5.4484375e-05,
+                "sem": 9.196359343436462e-07
+              },
+              "response_percent": {
+                "mean": -1.3578500707213579,
+                "sem": 2.538704278118143
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 6.763577127332812e-05,
+                "sem": 1.3014150427664584e-06
+              },
+              "finest": {
+                "mean": 6.697902159917188e-05,
+                "sem": 1.3721958120863133e-06
+              },
+              "response_percent": {
+                "mean": -0.9710093664818404,
+                "sem": 2.8650638302225997
+              }
+            }
+          }
+        },
+        "positron": {
+          "whole_plane": {
+            "weights": {
+              "default": {
+                "mean": 0.0002379375,
+                "sem": 1.9562267038016498e-06
+              },
+              "finest": {
+                "mean": 0.00023770312499999996,
+                "sem": 1.9377310010142448e-06
+              },
+              "response_percent": {
+                "mean": -0.098502758077227,
+                "sem": 0.5590204574759174
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 0.00033560417676682815,
+                "sem": 3.0484143694230568e-06
+              },
+              "finest": {
+                "mean": 0.0003351834698217344,
+                "sem": 3.1354880372457704e-06
+              },
+              "response_percent": {
+                "mean": -0.12535807782453512,
+                "sem": 0.5578379697266865
+              }
+            }
+          },
+          "central_band": {
+            "weights": {
+              "default": {
+                "mean": 2.921875e-06,
+                "sem": 2.3284886727248506e-07
+              },
+              "finest": {
+                "mean": 2.6718749999999997e-06,
+                "sem": 2.2609377828100652e-07
+              },
+              "response_percent": {
+                "mean": -8.55614973262032,
+                "sem": 9.791180924429165
+              }
+            },
+            "energies": {
+              "default": {
+                "mean": 4.230845031921875e-06,
+                "sem": 3.6579009471034964e-07
+              },
+              "finest": {
+                "mean": 3.476773158515625e-06,
+                "sem": 3.2852317321688845e-07
+              },
+              "response_percent": {
+                "mean": -17.823197676037555,
+                "sem": 10.012843286295503
+              }
+            }
+          }
+        }
+      }
+    },
+    "central_dose_step_response_percent": {
+      "0-0.4cm": {
+        "mean": -0.38966044586860327,
+        "sem": 0.4635662223949608
+      },
+      "2-4cm": {
+        "mean": 0.03203886502268567,
+        "sem": 0.24739166942901408
+      },
+      "8-10cm": {
+        "mean": -0.10395239623807054,
+        "sem": 0.27110427157339506
+      }
+    }
+  },
+  "production_source_sha256": {
+    "pyradmc/__init__.py": "395687eb299b390065f4af6d1148026f8aa7cd7eaf93d9e108fb3c3d967a46cd",
+    "pyradmc/physics/brems.py": "4b83afd2c0e3b0f1abbdfbb7f2a80e4cc31ab7cecd066e33269f603728ca8064",
+    "pyradmc/physics/compton.py": "52774034c38962a023ddddf478ffb82f18083e924abf5ccd1df5fe65b11f0d33",
+    "pyradmc/transport/electron.py": "a8e5a53a857d8d5b9e3069e514cdd866fb70386d80699baea8cb68016608dbbd",
+    "pyradmc/backends/warp/kernels.py": "b0990ccfedec00a32b860dd2dba86660feec3ebae34989c00b50b2d3fee3b9a5"
+  },
+  "passive_instrument": {
+    "description": "Passive local surface scorer; original transport source snapshot; second-half energy linearly interpolated, not a Geant4 transport reconstruction. Counts include repeated crossings and are not a replay source.",
+    "original": {
+      "pyradmc/backends/warp/kernels.py": "b0990ccfedec00a32b860dd2dba86660feec3ebae34989c00b50b2d3fee3b9a5",
+      "pyradmc/backends/warp/engine.py": "fba53b242c54c0b51d3950f296deef11b51f2dab0febc506502acca469b1589f"
+    }
+  },
+  "instrument_source_sha256": {
+    "instrumented/pyradmc/backends/warp/kernels.py": "247ec5608a57329f36e3a547cf5f8f70434bf58c714acace7e0b8cd2e660da5a",
+    "instrumented/pyradmc/backends/warp/engine.py": "277756d35c8f484e5dd044f3b0f0ed2cea2a9cbae64ebb6c038dc7de272e4a43"
+  },
+  "region_restricted": {
+    "method": "32M/case and matched seeds. All instruments use ECUT=25 keV. Fine step=0.0125; other region=0.2. Region chosen by step-start material (non-water brass/air vs water), not by a test that identifies actual boundary-crossing steps. No production library edits. \u00b1SEM for paired dose changes; paired bootstrap SD for FWHM changes.",
+    "slabs": {
+      "0-0.4cm": {
+        "default": {
+          "absolute_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.579986704807768,
+            "bootstrap_sd_mm": 0.008682028594246735,
+            "bootstrap_percentile95_mm": [
+              0.563814379869932,
+              0.5984260291106199
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.0,
+            "bootstrap_sd": 0.0,
+            "percentile95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "all": {
+          "absolute_central_response_percent": {
+            "mean": 0.07945836664328476,
+            "sem": 0.7085155962400284
+          },
+          "net_central_response_percent": {
+            "mean": 1.064276901066742,
+            "sem": 1.121869350511778
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.579682641576347,
+            "bootstrap_sd_mm": 0.008061248660935907,
+            "bootstrap_percentile95_mm": [
+              0.5650997180333275,
+              0.5966960935305062
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": -0.00030406323142107006,
+            "bootstrap_sd": 0.008543867920592998,
+            "percentile95": [
+              -0.01816988982327819,
+              0.015432567011868042
+            ]
+          }
+        },
+        "upstream": {
+          "absolute_central_response_percent": {
+            "mean": 0.0015442044134665878,
+            "sem": 0.8645897546814251
+          },
+          "net_central_response_percent": {
+            "mean": 1.1017888500183202,
+            "sem": 0.9568184486508705
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.5808889792157939,
+            "bootstrap_sd_mm": 0.007780330897590362,
+            "bootstrap_percentile95_mm": [
+              0.5651133521407276,
+              0.596071889197647
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.000902274408025816,
+            "bootstrap_sd": 0.004937214682129055,
+            "percentile95": [
+              -0.009130761154765809,
+              0.010216812017991827
+            ]
+          }
+        },
+        "water": {
+          "absolute_central_response_percent": {
+            "mean": -0.24401374518013833,
+            "sem": 0.5464307229446888
+          },
+          "net_central_response_percent": {
+            "mean": 0.8247951829861346,
+            "sem": 1.03506756833118
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.5755543796141328,
+            "bootstrap_sd_mm": 0.008591644269130038,
+            "bootstrap_percentile95_mm": [
+              0.5602322398373017,
+              0.5939894408165981
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": -0.004432325193635234,
+            "bootstrap_sd": 0.008127236852648701,
+            "percentile95": [
+              -0.019884766784016607,
+              0.011046929099669622
+            ]
+          }
+        }
+      },
+      "2-4cm": {
+        "default": {
+          "absolute_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.6825521806221679,
+            "bootstrap_sd_mm": 0.007926590848561127,
+            "bootstrap_percentile95_mm": [
+              0.66714455093896,
+              0.697913528618969
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.0,
+            "bootstrap_sd": 0.0,
+            "percentile95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "all": {
+          "absolute_central_response_percent": {
+            "mean": -0.1848501926081788,
+            "sem": 0.3374905516369155
+          },
+          "net_central_response_percent": {
+            "mean": -0.942523187221203,
+            "sem": 0.6048337330772082
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7014268382257345,
+            "bootstrap_sd_mm": 0.008293899488631403,
+            "bootstrap_percentile95_mm": [
+              0.6846861827629941,
+              0.7170893033841844
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.018874657603566547,
+            "bootstrap_sd": 0.007811241216071266,
+            "percentile95": [
+              0.004053946114723419,
+              0.03419626733866614
+            ]
+          }
+        },
+        "upstream": {
+          "absolute_central_response_percent": {
+            "mean": 0.0921516975838095,
+            "sem": 0.024673565408640782
+          },
+          "net_central_response_percent": {
+            "mean": -0.013819133136346754,
+            "sem": 0.0340785659954449
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.6832132714724272,
+            "bootstrap_sd_mm": 0.007878143055743783,
+            "bootstrap_percentile95_mm": [
+              0.668033301530937,
+              0.6982472460854021
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.0006610908502592272,
+            "bootstrap_sd": 0.0004085595929506635,
+            "percentile95": [
+              -0.00014155901191817142,
+              0.0014816837055015685
+            ]
+          }
+        },
+        "water": {
+          "absolute_central_response_percent": {
+            "mean": -0.26457775600381084,
+            "sem": 0.3350167158952485
+          },
+          "net_central_response_percent": {
+            "mean": -0.9345402498556592,
+            "sem": 0.612818734441062
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7013244556069154,
+            "bootstrap_sd_mm": 0.00844541195906842,
+            "bootstrap_percentile95_mm": [
+              0.6842378616262061,
+              0.7176963150812711
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.018772274984747428,
+            "bootstrap_sd": 0.007885208152377417,
+            "percentile95": [
+              0.003755509361265702,
+              0.03413790867827135
+            ]
+          }
+        }
+      },
+      "8-10cm": {
+        "default": {
+          "absolute_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_central_response_percent": {
+            "mean": 0.0,
+            "sem": 0.0
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7389068339575597,
+            "bootstrap_sd_mm": 0.007700876320983776,
+            "bootstrap_percentile95_mm": [
+              0.7216757352923587,
+              0.7513633328214882
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.0,
+            "bootstrap_sd": 0.0,
+            "percentile95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "all": {
+          "absolute_central_response_percent": {
+            "mean": 0.13753045408465336,
+            "sem": 0.42580413550245916
+          },
+          "net_central_response_percent": {
+            "mean": -1.487831252905223,
+            "sem": 0.6228484931271533
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7472229991615655,
+            "bootstrap_sd_mm": 0.006698698366647749,
+            "bootstrap_percentile95_mm": [
+              0.7329620942285816,
+              0.7594444750159973
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.008316165204005799,
+            "bootstrap_sd": 0.008590833558165645,
+            "percentile95": [
+              -0.007750778242248818,
+              0.02532775754808259
+            ]
+          }
+        },
+        "upstream": {
+          "absolute_central_response_percent": {
+            "mean": 0.03569638313026736,
+            "sem": 0.025781129139037316
+          },
+          "net_central_response_percent": {
+            "mean": -0.020517959588799102,
+            "sem": 0.02405820624869406
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7390234948739329,
+            "bootstrap_sd_mm": 0.007785018224390676,
+            "bootstrap_percentile95_mm": [
+              0.7219232965444125,
+              0.7517447486943762
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.0001166609163731902,
+            "bootstrap_sd": 0.0003680589073997028,
+            "percentile95": [
+              -0.0006863985865271955,
+              0.0008317042609782133
+            ]
+          }
+        },
+        "water": {
+          "absolute_central_response_percent": {
+            "mean": 0.06715238178929578,
+            "sem": 0.4313274843278872
+          },
+          "net_central_response_percent": {
+            "mean": -1.4747194644730868,
+            "sem": 0.6268101790386765
+          },
+          "net_fwhm": {
+            "resolved": true,
+            "mean_profile_fwhm_mm": 0.7471033857044829,
+            "bootstrap_sd_mm": 0.006752124729872406,
+            "bootstrap_percentile95_mm": [
+              0.73286437677863,
+              0.7593569209111586
+            ],
+            "valid_bootstrap_samples": 1000,
+            "caveat": "Descriptive FWHM of noisy control-subtracted profile; bootstrap across independent paired chunks, no smoothing or sub-grid physical information."
+          },
+          "paired_width_change_mm": {
+            "mean_profile_difference": 0.00819655174692313,
+            "bootstrap_sd": 0.008657006132259436,
+            "percentile95": [
+              -0.007984684256935586,
+              0.025604386005579818
+            ]
+          }
+        }
+      }
+    },
+    "phase": {
+      "-1": {
+        "photon": {
+          "whole_plane": {
+            "default": {
+              "energy_current": {
+                "mean": 1.0001138635404576,
+                "sem": 0.00018392032375338666
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 1.000317637465271,
+                "sem": 0.00018590187986581062
+              },
+              "response_percent": {
+                "mean": 0.02037507250343383,
+                "sem": 0.002109115576454464
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 1.0003174249430513,
+                "sem": 0.00018611702393041353
+              },
+              "response_percent": {
+                "mean": 0.020353822701038003,
+                "sem": 0.0020899552750053138
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 1.0001145027856515,
+                "sem": 0.00018374523006123848
+              },
+              "response_percent": {
+                "mean": 6.391724155838606e-05,
+                "sem": 0.0001738008205444161
+              }
+            }
+          },
+          "central_band": {
+            "default": {
+              "energy_current": {
+                "mean": 0.022825725228284466,
+                "sem": 4.2210739516699326e-05
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 0.02282852014721369,
+                "sem": 4.320737239794563e-05
+              },
+              "response_percent": {
+                "mean": 0.012244600779455212,
+                "sem": 0.01190929582964374
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 0.02282853728424891,
+                "sem": 4.3236936607819226e-05
+              },
+              "response_percent": {
+                "mean": 0.012319678504466514,
+                "sem": 0.011956397444519264
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 0.022825786195263282,
+                "sem": 4.219388841280426e-05
+              },
+              "response_percent": {
+                "mean": 0.00026709766372325615,
+                "sem": 0.00035612051902225055
+              }
+            }
+          }
+        },
+        "electron": {
+          "whole_plane": {
+            "default": {
+              "energy_current": {
+                "mean": 0.0057033441299656875,
+                "sem": 1.4047856585521523e-05
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 0.005657747235354469,
+                "sem": 1.5496643411923467e-05
+              },
+              "response_percent": {
+                "mean": -0.7994764750674987,
+                "sem": 0.18266104838313632
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 0.005656451156500719,
+                "sem": 1.5202085125983657e-05
+              },
+              "response_percent": {
+                "mean": -0.8222013681164804,
+                "sem": 0.1851299439084118
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 0.005702452942393156,
+                "sem": 1.3868795541599925e-05
+              },
+              "response_percent": {
+                "mean": -0.01562570225859079,
+                "sem": 0.023891056364871117
+              }
+            }
+          },
+          "central_band": {
+            "default": {
+              "energy_current": {
+                "mean": 6.609498630028126e-05,
+                "sem": 2.0035928124435263e-06
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 7.725007525540624e-05,
+                "sem": 2.5462248474873056e-06
+              },
+              "response_percent": {
+                "mean": 16.877360265187814,
+                "sem": 3.259811620434367
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 7.70685322603125e-05,
+                "sem": 2.556120066939384e-06
+              },
+              "response_percent": {
+                "mean": 16.602690422200077,
+                "sem": 3.304510862886361
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 6.618319395915624e-05,
+                "sem": 2.0043326269921847e-06
+              },
+              "response_percent": {
+                "mean": 0.13345590008031338,
+                "sem": 0.17044425455755466
+              }
+            }
+          }
+        }
+      },
+      "0": {
+        "photon": {
+          "whole_plane": {
+            "default": {
+              "energy_current": {
+                "mean": 0.9987438310956702,
+                "sem": 0.0001833565084373382
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 0.9989547034880062,
+                "sem": 0.00018506026883256005
+              },
+              "response_percent": {
+                "mean": 0.021113761684481258,
+                "sem": 0.0020412578547576534
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 0.9989539664884761,
+                "sem": 0.00018531206260307981
+              },
+              "response_percent": {
+                "mean": 0.02103996903544724,
+                "sem": 0.0020353445445769084
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 0.9987444385024354,
+                "sem": 0.00018316763622756732
+              },
+              "response_percent": {
+                "mean": 6.081707304409744e-05,
+                "sem": 0.00014410911093825984
+              }
+            }
+          },
+          "central_band": {
+            "default": {
+              "energy_current": {
+                "mean": 0.022483078154067217,
+                "sem": 4.1090637283029395e-05
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 0.022487426115855566,
+                "sem": 4.0718988702444174e-05
+              },
+              "response_percent": {
+                "mean": 0.01933881899333051,
+                "sem": 0.009468260113863938
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 0.022487482787577874,
+                "sem": 4.069578612710159e-05
+              },
+              "response_percent": {
+                "mean": 0.01959088288744818,
+                "sem": 0.009454177358099013
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 0.022482989796214468,
+                "sem": 4.109243329576592e-05
+              },
+              "response_percent": {
+                "mean": -0.00039299713386504054,
+                "sem": 0.0004973187408683536
+              }
+            }
+          }
+        },
+        "electron": {
+          "whole_plane": {
+            "default": {
+              "energy_current": {
+                "mean": 0.005644536119012188,
+                "sem": 1.3974800087009015e-05
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 0.005618403712734938,
+                "sem": 1.5278436128723842e-05
+              },
+              "response_percent": {
+                "mean": -0.4629681824380484,
+                "sem": 0.18740317512456486
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 0.005619281613593688,
+                "sem": 1.5094976143745175e-05
+              },
+              "response_percent": {
+                "mean": -0.44741507337399294,
+                "sem": 0.18909407287156133
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 0.005644150534278657,
+                "sem": 1.3686946094740014e-05
+              },
+              "response_percent": {
+                "mean": -0.006831114646116862,
+                "sem": 0.020917751865123024
+              }
+            }
+          },
+          "central_band": {
+            "default": {
+              "energy_current": {
+                "mean": 6.811109317821876e-05,
+                "sem": 1.9654731985916017e-06
+              },
+              "response_percent": {
+                "mean": 0.0,
+                "sem": 0.0
+              }
+            },
+            "all": {
+              "energy_current": {
+                "mean": 6.509246171871875e-05,
+                "sem": 2.057304828169899e-06
+              },
+              "response_percent": {
+                "mean": -4.431923374950806,
+                "sem": 4.382593145203774
+              }
+            },
+            "upstream": {
+              "energy_current": {
+                "mean": 6.514787055543749e-05,
+                "sem": 2.03945402407203e-06
+              },
+              "response_percent": {
+                "mean": -4.350572696033102,
+                "sem": 4.345927606413474
+              }
+            },
+            "water": {
+              "energy_current": {
+                "mean": 6.813613248940625e-05,
+                "sem": 1.960725462579565e-06
+              },
+              "response_percent": {
+                "mean": 0.03676245677335085,
+                "sem": 0.14596294795769119
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "region_instruments": {
+    "upstream": {
+      "meaning": "Shrink only non-water (brass/air)",
+      "kernel_sha256": "7de21a28c44a852afd31d95e14f9ec295c5e3c3a259e76fc0a4957cb916e3f00"
+    },
+    "water": {
+      "meaning": "Shrink only water",
+      "kernel_sha256": "7851063255f46afd4f706c50f3cf703d572c4445e2880d48590b6289264640a3"
+    }
+  },
+  "audit": {
+    "single_step0.05": {
+      "closed": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4279356445304692e-09
+      },
+      "slit": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4422655595763713e-09
+      }
+    },
+    "t10_n3_step0.05": {
+      "slit": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 7.286758600483422e-10
+      }
+    },
+    "t10_n5_step0.05": {
+      "slit": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 9.440733721916795e-10
+      }
+    },
+    "single_step0.0125": {
+      "closed": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.8356720436214219e-09
+      },
+      "slit": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.8942840956175866e-09
+      }
+    },
+    "t10_n3_step0.0125": {
+      "slit": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 9.066247756382374e-10
+      }
+    },
+    "t10_n5_step0.0125": {
+      "slit": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.0690952978398947e-09
+      }
+    },
+    "phase_step0.2": {
+      "closed": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.386820836621752e-09
+      },
+      "slit": {
+        "batches": 64,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4555567365859653e-09
+      }
+    },
+    "phase_step0.05": {
+      "closed": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4279356445304692e-09
+      },
+      "slit": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4422655595763713e-09
+      }
+    },
+    "phase_step0.0125": {
+      "closed": {
+        "batches": 16,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.8356720436214219e-09
+      },
+      "slit": {
+        "batches": 64,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.8942840956175866e-09
+      }
+    },
+    "region_upstream": {
+      "closed": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.3960640564949582e-09
+      },
+      "slit": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.4184011727295674e-09
+      }
+    },
+    "region_water": {
+      "closed": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.5221121020214173e-09
+      },
+      "slit": {
+        "batches": 32,
+        "min_dose": 0.0,
+        "max_relative_energy_closure_error": 1.5514240106175152e-09
+      }
+    }
+  },
+  "metadata_note": "Local geometry templates retain legacy cutoffs_mev=0.2; actual diagnostic_ecut, effective_cutoffs and engine provenance all confirm 0.025. Historical descriptive text in compiled table is retained; delta_cut=0.025 verified."
+}

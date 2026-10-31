@@ -24,7 +24,8 @@ from a single physics source by tagging every history's whole secondary family w
 of origin. Scheduling — grouping, chunking, batch merging, which GPU gets which column — cannot
 change the matrix by one bit (test-pinned). Measured end to end on a laptop RTX 4070 at
 planning statistics: **~1.1e7 histories/s**, i.e. a 100-beamlet 6 MeV field at 2–3 %
-per-beamlet sigma in single-digit seconds.
+per-beamlet sigma in single-digit seconds. This archived timing used the former
+200 keV electron cutoff; it is not a throughput claim for the current 25 keV default.
 
 ![One physics source compiled three ways, and the throughput gap](https://raw.githubusercontent.com/e0404/pyRadMC/main/docs/assets/warp_backend_demo.png)
 
@@ -64,6 +65,21 @@ given seed.
 Both backends reuse deterministic Goudsmit-Saunderson tables from
 `~/.cache/pyradmc/gs-grid`. The reference sampler loads existing nodes and grows
 the stored window on demand, so fresh processes reuse previous table builds.
+
+## Small photon fields
+
+The default electron production/transport cutoff is now **25 keV**, replacing
+200 keV. At 200 keV, the water CSDA path still to be transported is about 0.45 mm,
+large enough to distort a 0.5 mm field. The lower cutoff restores lateral dose
+transport; it also produces more secondary electrons. Recompile tabulated electron
+data at the new cutoff before using old material files.
+
+Run `python -m examples.minibeam_cutoff_demo --device cuda:0` for the spectral
+heterogeneous-density example. Measured spectral brass/water comparisons, the
+unchanged photon cutoff, and remaining interface limitations are documented in
+[small-field accuracy](docs/minibeam.md). Brass material support remains experimental.
+The inverse-range lookup retains the zero-range cutoff endpoint, preventing
+artificially stalled collisional loss in fine-step convergence checks.
 
 ## Quick start
 

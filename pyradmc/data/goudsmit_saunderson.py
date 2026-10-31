@@ -368,7 +368,7 @@ def transport_moment_scattering_power(
     the width of the Moliere *core* with that logarithm frozen at a
     thin-target value, and since ``eta ~ 1/p^2`` the two diverge with energy —
     1.25x at 1 MeV, 1.68x at 10 MeV and 1.77x at 15 MeV in water for the
-    default 0.2 MeV cut.
+    historical 0.2 MeV cut (before the small-field cutoff revision).
 
     **Stated approximations.** Pure screened Rutherford: no Mott
     (spin-relativistic) factor, which at ``beta -> 1`` lowers the transport

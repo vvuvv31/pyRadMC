@@ -18,6 +18,17 @@ than the passes.
 Variance reduction is unbiased **by construction** and test-pinned as such against a
 roulette-free run; the validation gates pass with it active.
 
+## Submillimetre fields and the electron cutoff
+
+The 25 keV electron production/transport default replaces 200 keV after spectral
+brass/water cutoff measurements. The old cutoff locally deposits energy over a
+water CSDA path of about 0.45 mm, comparable to a 0.5 mm slit. A spectral
+heterogeneous-density validation test independently measures the lateral-dose
+change using paired batches, and a unit guard bounds the default residual range
+below one quarter of a 0.1 mm score bin. These do not establish spatial convergence
+or complete high-Z material validation. See [small-field accuracy](minibeam.md).
+The photon cutoff remains 50 keV and the GS step fraction remains 0.20.
+
 ## What is not gated, and why
 
 ### The depth-dose criterion is 5 %/3 mm, not 2 %/2 mm

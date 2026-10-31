@@ -282,3 +282,54 @@ by a demo whose absolute dose was wrong, not by a unit test; now regression-pinn
 **Flipping a validated default re-rolls every fixed-seed statistical test.** Expect around
 a 1 % trip rate across the suite, and repair those by fixing the oracle, never by
 loosening the tolerance.
+
+## 2026-10-30: Resolve submillimetre fields with a 25 keV electron cutoff
+
+The former 200 keV default locally terminates a water CSDA path of about
+0.45 mm. A 6 MV spectral, 0.5 mm brass-slit comparison with TOPAS identified
+suppressed lateral dose transport: decreasing the GS step fraction by four
+changed the 2–4 cm FWHM from 0.6303 to 0.6405 mm, whereas rebuilding all
+restricted electron tables at 50/25 keV gave 0.6906/0.6948 mm (TOPAS
+0.6955 mm). The 50→25 keV surface-dose change remained resolved; 25→10 keV
+was below the measured ~0.5–0.8% SEM. Adopt 25 keV as the single default,
+with PCUT and the step fraction unchanged. This is a resolution decision,
+not a fitted normalization. Old cutoff-specific tables require rebuilding.
+
+The runnable spectral density-heterogeneity example and validation test measure
+the dosimetric effect. Detailed conditions, uncertainty definitions and remaining
+brass/interface limitations are in [minibeam.md](minibeam.md). The post-hinge
+voxel-boundary approximation remains; a deterministic geometric counterexample
+alone does not establish its contribution to the observed dose residual.
+
+A separate fixed-seed CUDA fast-math regression reproduced E'/E > 1 by one
+float32 ULP in Compton sampling. Enforce the exact upper kinematic bound in
+the pure scalar sampler. This prevents negative recoil instead of clipping
+scored dose, and does not fit the reference to backend output.
+
+A further fixed-seed replay separated a second round-off source from Compton:
+a rounded bremsstrahlung cap followed by two electron-energy subtractions could
+leave terminal kinetic energy near −1e−8 MeV. Return the capped photon and
+nonnegative final kinetic energy from one shared scalar energy budget. This
+enforces E = k + scheduled_loss + E_final to float precision, with E_final >= 0;
+it does not change the thin-target emission law or clip the scored dose.
+## Inverse restricted-range zero endpoint (2026-10-30)
+
+A water-entry replay at ECUT=PCUT=10 keV and electron step fraction 0.0125
+exposed a numerical stall: the inverse range table's flat lower extrapolation
+could return its first-node energy above ECUT after a positive mass path. A
+deterministic constant-stopping regression demonstrates the missing loss. The
+inverse lookup now connects that node to E(0)=ECUT linearly in residual mass
+path, the local constant-stopping approximation to the continuous-loss relation
+(Sempau et al. 2000, doi:10.1088/0031-9155/45/8/315). Generic cross-section
+extrapolation, table nodes, production cutoff/step defaults and Dij truncation
+are unchanged. The reference backend is not adjusted. Host and compiled
+CPU/CUDA analytic regressions and a terminal-electron CUDA transport probe
+validate the endpoint. This numerical correction is separate from deciding an
+electron boundary algorithm or fitting minibeam dose to TOPAS.
+
+The endpoint correction does not remove forward/inverse interpolation mismatch
+at arbitrarily small mass steps. A subsequent air-distance-cap probe reproduced
+zero loss away from the inverse-table floor. Treat distance refinement as
+numerically contaminated until independently checked; a private midpoint
+stopping-power instrument is being measured, without adding a production flag
+or changing the reference. A log-energy probe is not a dose-error bound.

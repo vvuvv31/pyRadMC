@@ -122,7 +122,7 @@ def test_scattering_power_tracks_the_discrete_moller_cut() -> None:
     """Lower ECUT moves more electron scattering into explicit hard events."""
     xs = AnalyticCrossSections()
     energy = 6.0
-    low_cut = xs.scattering_power(energy, WATER, 0.05)
+    low_cut = xs.scattering_power(energy, WATER, 0.5 * ECUT_MEV)
     default_cut = xs.scattering_power(energy, WATER, ECUT_MEV)
     closed_channel = xs.scattering_power(energy, WATER, 0.5 * energy)
     assert low_cut < default_cut < closed_channel
