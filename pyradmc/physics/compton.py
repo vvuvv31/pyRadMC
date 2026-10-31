@@ -38,6 +38,10 @@ def sample_compton_energy_ratio(energy: float, rng_state: RNGState) -> float:
     acceptable cost in the reference backend; the Warp kernels adopted it
     unchanged, since rejection efficiency is not their bottleneck.
 
+    The sampled ratio is capped at its exact upper bound 1 against float32
+    reciprocal round-off (including CUDA fast math), so recoil energy cannot
+    become negative. This does not alter the analytic sampling distribution.
+
     Parameters
     ----------
     energy
@@ -56,12 +60,12 @@ def sample_compton_energy_ratio(energy: float, rng_state: RNGState) -> float:
         if u1 <= branch_probability:
             x = 1.0 + two_alpha * u2
             if u3 <= 4.0 * (x - 1.0) / (x * x):
-                return 1.0 / x
+                return min(1.0, 1.0 / x)
         else:
             x = (1.0 + two_alpha) / (1.0 + two_alpha * u2)
             cos_theta = 1.0 - (x - 1.0) / alpha
             if u3 <= 0.5 * (cos_theta * cos_theta + 1.0 / x):
-                return 1.0 / x
+                return min(1.0, 1.0 / x)
 
 
 def compton_cos_theta(energy: float, energy_ratio: float) -> float:

@@ -49,6 +49,7 @@ __all__ = [
     "TABLE_POINTS",
     "CrossSectionTables",
     "build_cross_section_tables",
+    "lookup_inverse_restricted_range",
     "lookup_loglinear_1d",
     "lookup_loglinear_2d",
 ]
@@ -62,9 +63,9 @@ COHERENT_POINTS: int = 512
 and the sampler inverts it, so far fewer nodes than the energy grids suffice."""
 
 _RANGE_R_MIN_FRACTION: float = 1.0e-6
-"""Lowest node of the shared log-range grid as a fraction of the largest
-material's full range: below it the inverse lookup clamps to an energy within
-interpolation error of the cutoff."""
+"""Lowest nonzero node of the shared log-range grid as a fraction of the
+largest material's full range. Below it, inverse restricted-range lookup joins
+the exact cutoff endpoint at zero range by linear interpolation in mass path."""
 
 _COHERENT_X_MIN_FRACTION: float = 1.0e-7
 """Lowest momentum-transfer node as a fraction of the maximum: small enough that the
@@ -131,6 +132,36 @@ def lookup_loglinear_2d(
     i = min(int(t), n_points - 2)
     w = t - float(i)
     return float(values[material, i]) * (1.0 - w) + float(values[material, i + 1]) * w
+
+
+def lookup_inverse_restricted_range(
+    values: Table2D,
+    material: int,
+    log_r_min: float,
+    inv_dlog: float,
+    n_points: int,
+    remaining_range: float,
+    cutoff: float,
+) -> float:
+    r"""Invert restricted range while retaining the physical zero-range endpoint.
+
+    The continuous-loss relation is ``E_end = r^-1(r(E) - rho*s)``
+    (Sempau et al. 2000, doi:10.1088/0031-9155/45/8/315). Below the first
+    inverse-table node, interpolate in mass path between ``E(0)=cutoff``
+    and ``E(R_min)``. This approximates restricted stopping as constant
+    over that residual interval. Flat extrapolation would instead hold
+    the electron above cutoff with zero collisional loss under small steps.
+
+    All existing inverse nodes and their log-range interpolation are retained.
+    This is a lookup for the inverse restricted range only; cross-section
+    lookups keep their ordinary flat boundary behavior.
+    """
+    if remaining_range <= 0.0:
+        return cutoff
+    r_min = math.exp(log_r_min)
+    if remaining_range < r_min:
+        return cutoff + (float(values[material, 0]) - cutoff) * remaining_range / r_min
+    return lookup_loglinear_2d(values, material, log_r_min, inv_dlog, n_points, remaining_range)
 
 
 # -- host-side container and builder ---------------------------------------------

@@ -139,6 +139,7 @@ sample_hinge_cos_theta = _p.sample_hinge_cos_theta
 sample_gs_cos_theta_grid = _p.sample_gs_cos_theta_grid
 bremsstrahlung_step_parameters = _p.bremsstrahlung_step_parameters
 sample_bremsstrahlung_energy = _p.sample_bremsstrahlung_energy
+capped_bremsstrahlung_budget = _p.capped_bremsstrahlung_budget
 roulette_weight = _p.roulette_weight
 lookup_1d = _p.lookup_loglinear_1d
 lookup_2d = _p.lookup_loglinear_2d
@@ -1699,13 +1700,14 @@ def electron_kernel(
             de = e - ecut
             moller_pending = False
         else:
-            e_end = lookup_2d(
+            e_end = _p.lookup_inverse_restricted_range(
                 tab.energy_of_restricted_range,
                 mat,
                 tab.r_log_min,
                 tab.r_inv_dlog,
                 tab.n_points,
                 available - rho * s,
+                ecut,
             )
             e_end = min(max(e_end, ecut), e)
             de = e - e_end
@@ -1790,9 +1792,10 @@ def electron_kernel(
         phi = 2.0 * math.pi * uniform(state)
         ux, uy, uz = rotate_direction(ux, uy, uz, cos_hinge, phi)
 
+        remaining_after_step = max(0.0, e - d2)
         if emit_brems and e > pcut:
             k = sample_bremsstrahlung_energy(e, pcut, state)
-            k = min(k, e - d2)
+            k, remaining_after_step = capped_bremsstrahlung_budget(e, d2, k)
             if k > pcut:
                 photon_w = w
                 if k < PHOTON_ROULETTE_MEV and w < PHOTON_ROULETTE_WEIGHT_CAP:
@@ -1831,7 +1834,6 @@ def electron_kernel(
                     _spr_factor(tab, dose_to_water, k, mat, ecut),
                     dose_to_water,
                 )
-            e -= k
 
         _deposit_spread(
             edep,
@@ -1853,7 +1855,7 @@ def electron_kernel(
             dose_to_water,
             deposit_resolution,
         )
-        e -= d2
+        e = remaining_after_step
         x += ux * s2
         y += uy * s2
         z += uz * s2

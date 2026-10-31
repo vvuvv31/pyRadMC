@@ -24,7 +24,11 @@ import math
 
 from pyradmc.rng import RNGState, uniform
 
-__all__ = ["bremsstrahlung_step_parameters", "sample_bremsstrahlung_energy"]
+__all__ = [
+    "bremsstrahlung_step_parameters",
+    "capped_bremsstrahlung_budget",
+    "sample_bremsstrahlung_energy",
+]
 
 
 def bremsstrahlung_step_parameters(
@@ -81,3 +85,22 @@ def sample_bremsstrahlung_energy(energy: float, pcut: float, rng_state: RNGState
         Per-history RNG state; consumes one uniform.
     """
     return pcut * math.exp(uniform(rng_state) * math.log(energy / pcut))
+
+
+def capped_bremsstrahlung_budget(
+    energy: float, reserved_loss: float, sampled_photon: float
+) -> tuple[float, float]:
+    """Cap photon energy and return the nonnegative terminal kinetic energy.
+
+    The second continuous half-step has already reserved ``reserved_loss`` MeV.
+    Energy conservation requires k <= E - reserved_loss and E_final = E-k-loss.
+    In float32 a rounded cap followed by the two subtractions can leave a tiny
+    negative E_final even when k is capped. Project that residual onto its exact
+    nonnegative support; never score negative recoil/terminal energy.
+
+    This is the existing thin-target cap, not a new emission model (Bethe &
+    Heitler, doi:10.1098/rspa.1934.0140). Inputs are nonnegative and the scheduled
+    loss must not exceed the available kinetic energy beyond round-off.
+    """
+    photon = min(sampled_photon, max(0.0, energy - reserved_loss))
+    return photon, max(0.0, (energy - photon) - reserved_loss)

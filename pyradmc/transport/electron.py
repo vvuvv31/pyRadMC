@@ -28,8 +28,11 @@ Substeps are limited three ways: a fraction of the CSDA range (energy-loss
 accuracy), a mean-square hinge-angle ceiling (multiple-scattering accuracy — the
 angular cap that replaced the historic half-voxel-edge limit; see
 :data:`STEP_HINGE_THETA2_MAX`), and truncation at the next voxel face
-(heterogeneity: a substep's density and material are exactly those of the voxel
-it runs in). The reference backend keeps the caps conservative; the Warp backend
+(heterogeneity: the incoming straight segment is limited to its start voxel).
+Stated residual approximation: the post-hinge segment can cross a face after
+deflection while still using the start material; incoming-ray truncation does
+not guarantee that the entire folded path is in one material. The reference
+backend keeps the caps conservative; the Warp backend
 mirrors this loop step for step and is validated against it — step aggressiveness
 beyond it must be bought with better transport mechanics, not by loosening the
 oracle.
@@ -49,7 +52,11 @@ from pyradmc import (
 )
 from pyradmc.data.interface import CrossSectionSource
 from pyradmc.geometry.grid import VoxelGrid, distance_to_voxel_boundary
-from pyradmc.physics.brems import bremsstrahlung_step_parameters, sample_bremsstrahlung_energy
+from pyradmc.physics.brems import (
+    bremsstrahlung_step_parameters,
+    capped_bremsstrahlung_budget,
+    sample_bremsstrahlung_energy,
+)
 from pyradmc.physics.direction import rotate_direction
 from pyradmc.physics.moller import moller_direction_cosines, sample_moller_delta_energy
 from pyradmc.physics.msc import sample_hinge_cos_theta
@@ -443,12 +450,13 @@ def electron_steps(
         phi = 2.0 * math.pi * uniform(rng_state)
         ux, uy, uz = rotate_direction(ux, uy, uz, cos_hinge, phi)
 
+        remaining_after_step = max(0.0, e - d2)
         if emit_brems and e > pcut:
             k = sample_bremsstrahlung_energy(e, pcut, rng_state)
             # Rare tail: the sampled photon would overdraw the energy still owed to
             # the second continuous deposit. Cap it; a capped photon at or below
             # PCUT is not transportable and deposits at the hinge instead.
-            k = min(k, e - d2)
+            k, remaining_after_step = capped_bremsstrahlung_budget(e, d2, k)
             if k > pcut:
                 photon_w = w
                 if k < PHOTON_ROULETTE_MEV and w < PHOTON_ROULETTE_WEIGHT_CAP:
@@ -460,10 +468,9 @@ def electron_steps(
                     spawn((PHOTON, k, photon_w, x, y, z, ux, uy, uz))  # forward
             else:
                 escaped += deposit_or_escape(x, y, z, w * k, deposit_weight(k, material))
-            e -= k
 
         escaped += deposit_spread(x, y, z, ux, uy, uz, s2, w * d2, substep_factor)
-        e -= d2
+        e = remaining_after_step
         x += ux * s2
         y += uy * s2
         z += uz * s2
