@@ -81,6 +81,12 @@ unchanged photon cutoff, and remaining interface limitations are documented in
 The inverse-range lookup retains the zero-range cutoff endpoint, preventing
 artificially stalled collisional loss in fine-step convergence checks.
 
+Circular-hole slabs on a hexagonal lattice are available through
+`pyradmc.geometry.holes.HexagonalHoleCollimator`. The builder paints explicit
+solid/air voxels, preserving collimator scatter and secondary transport. See
+[hole-array geometry and example](docs/minibeam.md#circular-holes-in-a-hexagonal-array)
+for 2 mm holes at 4 mm pitch on a 0.1 mm XY grid and its rasterization limits.
+
 ## Quick start
 
 ```python
@@ -120,3 +126,10 @@ releases only.
 ## License
 
 Apache-2.0. See [`LICENSE`](LICENSE).
+
+Native CT scoring can use `pyradmc.scoring.grid.OrientedScoringGrid`: a rigidly
+placed scoring grid bins deposits directly in native coordinates while transport
+remains axis aligned. Run `python -m examples.oriented_scoring_demo` for a small
+water example and figure. The local RT06071 full-head/weighted-Dij study is
+experimental; its input restrictions and batch workflow are described in
+[the minibeam notes](docs/minibeam.md).

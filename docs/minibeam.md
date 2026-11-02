@@ -418,3 +418,114 @@ The finite 7 cm SI extent and single narrow field do not certify a full PTV
 plan or Dij. No production physics, defaults or tables were changed for this
 measurement. Full local records and figures are in
 `local_rt07575_minibeam_20261031/RESULTS.md`; patient input data stay local.
+
+## Circular holes in a hexagonal array
+
+`pyradmc.geometry.holes.HexagonalHoleCollimator` builds an explicit straight-hole
+slab on an existing `VoxelGrid`. It uses circular openings with centers on a
+triangular lattice (hexagonal packing). Ring counts 0/1/2/3 give 1/7/19/37 holes.
+All dimensions are physical grid-frame coordinates in **cm**, not projected
+isocenter settings. The array axes are parallel to grid z; holes are unfocused.
+
+```python
+from pyradmc.data.materials import TUNGSTEN
+from pyradmc.geometry.holes import HexagonalHoleCollimator
+
+holes = HexagonalHoleCollimator(
+    diameter_cm=0.2,        # 2 mm holes
+    pitch_cm=0.4,           # 4 mm nearest-neighbor center spacing
+    rings=1,               # center plus six surrounding holes
+    z_range_cm=(-3.0, -1.0),
+)
+# grid must contain the entire slab and every nominal hole.
+# paint mutates only the slab: both its solid and its air opening cells.
+holes.paint(grid, solid_material=TUNGSTEN, solid_density=19.3)
+```
+
+The material is supplied independently and must be covered by the chosen
+cross-section source. The analytic source supports water only; tungsten/air
+requires tabulated data. This builder does not register brass, change physics,
+filter the incident source, or discard collimator scatter. It fills the slab
+across the entire transverse grid; voxels outside its z interval are preserved.
+Slab faces must align with z voxel faces and nominal holes must fit inside x/y.
+
+A transverse cell belongs to an opening if its center is strictly inside the
+nominal circle. There are no fractional-density edge cells or hidden grid
+refinement. With 0.1 mm XY cells, 2 mm holes and the centered 4 mm-pitch seven-hole
+array, each opening occupies 316 cells: 3.16 mm² versus ideal area π mm², a
++0.586% difference. Cartesian walls need not retain exact sixfold symmetry.
+A smaller area error does not establish a corresponding bound on dose error.
+Straight-hole vignetting of a divergent source is retained.
+
+The runnable example uses shipped tungsten material definitions with supplied
+precompiled registry tables at the current electron cutoff:
+
+```bash
+python -m examples.hexagonal_holes_demo --tables materials.npz --device cuda:0
+```
+
+It saves `examples/hexagonal_holes_demo.png`, showing the actual raster aperture,
+depth-resolved water dose and a central profile with independent-batch SEM.
+`materials.npz` must include tungsten/air/water; prepare registry tables through
+`pyradmc.data.tabulated.precompile.compile_materials` and `save_tables`, as in the
+existing tabulated/material examples. External-library preparation is separate
+from the short transport example. The tungsten demonstration is not the brass
+benchmark or clinical validation.
+
+A seven-hole brass/water measurement uses three ensembles of 128M photons:
+Warp raster holes, TOPAS identical raster holes and TOPAS ideal circular holes.
+At water slabs 0–1/2–3/5–6/10–11/15–16 cm, pooled peak differences versus the
+same-raster TOPAS reference range from −1.41% to +1.16%, and pooled valley
+from −0.94% to +2.34%. Independent difference SEM spans 0.64–1.21%.
+A ten-feature covariance-aware bootstrap detects no joint discrepancy at this
+precision (p=0.221); this is not proof of equivalence. Individual-hole difference
+SEM is about 1.5–3.2%, so pooled precision must not be assigned to each hole.
+
+The paired TOPAS raster-versus-circle pooled peak shifts are +0.006% to +0.108%
+with 0.11–0.17% SEM, with no clearly resolved effect at these windows; local edge
+errors remain unconstrained. Both the aperture and navigation change. The 2 cm
+brass geometry gives a pooled PVDR of only about 1.33–1.40. This is a thin-plate
+water benchmark, not a high-contrast CT/Dij validation. Compact per-hole
+measurements and provenance are retained locally in
+`tests/validation/data/hexagonal_holes_20261031.json`; this generated data file
+is not included in the repository. Full local figures and records are under
+`local_hexholes_20261031/RESULTS.md`.
+
+### Native CT scoring and the RT06071 Dij pilot
+
+`pyradmc.scoring.grid.OrientedScoringGrid` places a native rectilinear scoring
+array with `world = rotation @ local + translation`. Deposits are transformed
+before binning, preserving the native mass and row order without rotating or
+interpolating dose. The transport grid remains axis aligned. A small runnable
+example is `python -m examples.oriented_scoring_demo`; it saves a native-plane
+figure beside the script.
+
+The local RT06071 study now tests original upstream-cone MLC/tilted-hole/CT
+columns, including a shifted opening and a 24° gantry group. An unbiased
+full-cone/focused-square mixture preserves support for head transmission and
+scatter. An independent three-segment exposure checks unequal column weights;
+plan uncertainty comes from complete-plan batch maps. This supports advancing
+to a complete matrix, and does not certify every beamlet or another CT case.
+The full local queue, material restrictions, checkpoints and numerical results
+are documented in `local_rt06071_gate_20261101/DIJ_WORKFLOW.md`. Those local
+inputs/outputs are not included in the public repository.
+
+For the historical RT06071 GATE comparison, the selected geometry is `shift_6`:
+2 mm hole diameter and 6 mm pitch at isocenter. The main-directory scripts use
+different projected dimensions and must not be mixed into that comparison.
+The native dose scoring grid is 1 mm; a 0.1 mm XY transport grid does not imply
+0.1 mm dose scoring. Compare single-angle, single-shift transverse planes before
+summing shifts: shifted exposures fill valleys and can hide the hole pattern.
+
+Export to matRad requires native `(x,y,z)` dose arrays to be transposed to
+`(y,x,z)` before MATLAB F-order flattening. Direct native F-order flattening
+does not match the structure indices in this case. Historical GATE matrix
+normalization is undocumented, so shape plots use explicit relative
+normalization rather than claiming absolute-dose agreement.
+
+The existing 1e-3 column-relative Dij truncation is not automatically suitable
+for FMO: in the earlier 447-column main-geometry sum it reduced CTV Dmean by
+6.00% and D95 by 15.81% relative to untruncated dose. Preserve full tails and
+measure DVH effects for the selected geometry before choosing an export
+threshold. The engine default has not been changed. A summed plan uncertainty
+must not be inferred by quadrature-combining column sigmas.

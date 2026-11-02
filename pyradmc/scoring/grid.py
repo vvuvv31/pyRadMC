@@ -36,7 +36,7 @@ import numpy as np
 
 from pyradmc.geometry.grid import VoxelGrid, point_axis_index, point_inside
 
-__all__ = ["ScoringGrid"]
+__all__ = ["OrientedScoringGrid", "ScoringGrid"]
 
 
 def _axis_overlap_lengths(
@@ -217,3 +217,49 @@ class ScoringGrid:
             return -1
         ix, iy, iz = self.voxel_index(x, y, z)
         return (ix * self.shape[1] + iy) * self.shape[2] + iz
+
+
+@dataclass(frozen=True)
+class OrientedScoringGrid(ScoringGrid):
+    """Native rectilinear scoring under a rigid placement in transport space.
+
+    ``world = rotation @ local + translation``; origin and spacing are local
+    coordinates in cm. Mass is supplied in native voxel order. This is an exact
+    coordinate transform, with no dose interpolation or transport-geometry change.
+    The caller must supply physical masses for this placement; ``rebin`` and
+    ``for_grid`` are not constructors for an oriented placement.
+    """
+
+    rotation: np.ndarray
+    translation: np.ndarray
+
+    def __post_init__(self) -> None:
+        """Validate rigid placement and the inherited local grid."""
+        super().__post_init__()
+        if (
+            self.rotation.shape != (3, 3)
+            or not np.isfinite(self.rotation).all()
+            or not np.allclose(self.rotation.T @ self.rotation, np.eye(3), atol=1e-10, rtol=0)
+            or not np.isclose(np.linalg.det(self.rotation), 1.0, atol=1e-10, rtol=0)
+        ):
+            raise ValueError("rotation must be a finite proper orthonormal matrix")
+        if self.translation.shape != (3,) or not np.isfinite(self.translation).all():
+            raise ValueError("translation must be a finite 3-vector")
+
+    def _local(self, x: float, y: float, z: float) -> np.ndarray:
+        return np.asarray(self.rotation.T @ (np.array([x, y, z]) - self.translation))
+
+    def contains(self, x: float, y: float, z: float) -> bool:
+        """Test containment after mapping world coordinates into native space."""
+        local = self._local(x, y, z)
+        return point_inside(
+            float(local[0]), float(local[1]), float(local[2]), *self.origin, *self.upper_corner
+        )
+
+    def voxel_index(self, x: float, y: float, z: float) -> tuple[int, int, int]:
+        """Return the native voxel index of an inside world-space position."""
+        local = self._local(x, y, z)
+        return tuple(  # type: ignore[return-value]
+            point_axis_index(float(local[i]), self.origin[i], self.spacing[i], self.shape[i])
+            for i in range(3)
+        )

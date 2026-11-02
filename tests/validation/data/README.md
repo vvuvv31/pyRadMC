@@ -131,3 +131,22 @@ local `morning_results_20261030.zip` contains reports, figures and review
 sources, with a SHA256 manifest; it excludes raw dose/phase-space data and the
 installed simulation environment. Saved-batch recomputation of 18 key reported
 measurements is an analysis audit, not another independent transport ensemble.
+
+## Hexagonal circular-hole array (2026-10-31)
+
+The local, uncommitted `hexagonal_holes_20261031.json` records the seven-hole
+water benchmark: 2 mm
+hole diameter, 4 mm nearest-neighbor pitch, 2 cm Cu70/Zn30 brass, 0.1 mm XY
+transport/scoring cells and 2 mm depth bins. GPU, TOPAS identical raster
+apertures and TOPAS exact circular apertures each use 32 independent batches
+of 4M upstream photons. GPU/TOPAS are independent; the two TOPAS geometries
+use paired source/transport seeds. Per-window integration precedes batch SEM;
+pooled peaks/valleys are equal-weight means of the individual window doses.
+
+The archive contains individual and pooled ROI estimates, input/source hashes,
+normalization audit and the covariance-aware joint discrepancy test. These are
+project-generated simulation measurements, not a dose acceptance threshold or
+clinical data. Full arrays, sources, logs and scripts stay in the local
+`local_hexholes_20261031/` directory; the compact JSON alone cannot rerun them.
+See [circular-hole geometry](../../../docs/minibeam.md#circular-holes-in-a-hexagonal-array)
+for the API and rasterization convention. Brass material support remains experimental.

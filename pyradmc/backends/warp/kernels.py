@@ -195,6 +195,9 @@ class GridInfo:
     r_outer_sq: float
     r_edges_sq: wp.array(dtype=float)
     z_edges: wp.array(dtype=float)
+    # Rigid scoring placement, mode == 2. Transport always remains axis aligned.
+    rotation: wp.mat33
+    translation: wp.vec3
 
 
 @wp.struct
@@ -491,6 +494,28 @@ def _spr_factor(
 
 
 @wp.func
+def _density_at(
+    density: wp.array3d(dtype=float),
+    material: wp.array3d(dtype=wp.uint8),
+    ix: int,
+    iy: int,
+    iz: int,
+) -> float:
+    """Read exact voxel density or a material-density lookup storage layout.
+
+    A lookup has shape (1, 1, n_materials) and is only uploaded when the caller
+    established a constant density per material. This changes storage only.
+    """
+    if (
+        density.shape[0] != material.shape[0]
+        or density.shape[1] != material.shape[1]
+        or density.shape[2] != material.shape[2]
+    ):
+        return density[0, 0, int(material[ix, iy, iz])]
+    return density[ix, iy, iz]
+
+
+@wp.func
 def _scoring_index(si: GridInfo, x: float, y: float, z: float) -> int:
     """Flat scoring-bin index for a position, or -1 when the geometry excludes it.
 
@@ -514,6 +539,16 @@ def _scoring_index(si: GridInfo, x: float, y: float, z: float) -> int:
     inside a nested conditional does not survive the block, and the silent effect
     was a kernel that scored nothing at all. Every path returns explicitly.
     """
+    if si.mode == 2:
+        local = wp.transpose(si.rotation) * (wp.vec3(x, y, z) - si.translation)
+        if point_inside(
+            local[0], local[1], local[2], si.x_lo, si.y_lo, si.z_lo, si.x_hi, si.y_hi, si.z_hi
+        ):
+            ix = point_axis_index(local[0], si.x_lo, si.sx, si.nx)
+            iy = point_axis_index(local[1], si.y_lo, si.sy, si.ny)
+            iz = point_axis_index(local[2], si.z_lo, si.sz, si.nz)
+            return (ix * si.ny + iy) * si.nz + iz
+        return -1
     if si.mode == 0:
         if point_inside(x, y, z, si.x_lo, si.y_lo, si.z_lo, si.x_hi, si.y_hi, si.z_hi):
             ix = point_axis_index(x, si.x_lo, si.sx, si.nx)
@@ -1243,7 +1278,7 @@ def photon_kernel(
         ix = point_axis_index(x, gi.x_lo, gi.sx, gi.nx)
         iy = point_axis_index(y, gi.y_lo, gi.sy, gi.ny)
         iz = point_axis_index(z, gi.z_lo, gi.sz, gi.nz)
-        rho = density[ix, iy, iz]
+        rho = _density_at(density, material, ix, iy, iz)
         mat = int(material[ix, iy, iz])  # uint8 voxel map -> table row index
         mu_compton = rho * lookup_2d(
             tab.mu_compton, mat, tab.p_log_e_min, tab.p_inv_dlog, tab.n_points, e
@@ -1632,7 +1667,7 @@ def electron_kernel(
         ix = point_axis_index(x, gi.x_lo, gi.sx, gi.nx)
         iy = point_axis_index(y, gi.y_lo, gi.sy, gi.ny)
         iz = point_axis_index(z, gi.z_lo, gi.sz, gi.nz)
-        rho = density[ix, iy, iz]
+        rho = _density_at(density, material, ix, iy, iz)
         mat = int(material[ix, iy, iz])  # uint8 voxel map -> table row index
 
         # --- substep length ----------------------------------------------------

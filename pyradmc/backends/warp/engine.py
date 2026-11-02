@@ -69,7 +69,7 @@ from pyradmc.scoring.cylinder import CylindricalScoringGrid
 from pyradmc.scoring.dij import DijAssembler, DijResult
 from pyradmc.scoring.dose import ScoringGeometry
 from pyradmc.scoring.dose_to_water import validate_scoring_mode
-from pyradmc.scoring.grid import ScoringGrid
+from pyradmc.scoring.grid import OrientedScoringGrid, ScoringGrid
 from pyradmc.transport.electron import default_step_energy_fraction
 from pyradmc.transport.particles import ELECTRON, PHOTON, POSITRON
 
@@ -144,6 +144,10 @@ def _scoring_info(scoring: ScoringGeometry, device: str) -> GridInfo:
     si.r_inner_sq = si.r_outer_sq = 0.0
     si.r_edges_sq = _no_shells(device)
     si.z_edges = _no_shells(device)
+    if isinstance(scoring, OrientedScoringGrid):
+        si.mode = 2
+        si.rotation = wp.mat33(*scoring.rotation.reshape(-1).tolist())
+        si.translation = wp.vec3(*scoring.translation.tolist())
     return si
 
 
@@ -3341,7 +3345,9 @@ class WarpEngine:
         gi.nx = self.grid.shape[0]
         gi.ny = self.grid.shape[1]
         gi.nz = self.grid.shape[2]
-        gi.n_voxels = int(np.prod(self.grid.shape))
+        # Only scoring reads this field; transport uses three axis indices.
+        # Avoid overflowing int32 on large transport grids with small scorers.
+        gi.n_voxels = 0
         gi.min_spacing = min(self.grid.spacing)
         # The transport grid is always rectilinear (AGENTS.md 6); these fields exist
         # only because scoring shares the struct, and no kernel reads them at mode 0.

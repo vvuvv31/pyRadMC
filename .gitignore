@@ -13,6 +13,11 @@ dist/
 # Compiled tabulated cross-section tables: derived from the (uncommitted, user-side)
 # EPICS libraries by pyradmc.data.tabulated.build, so not tracked.
 *.npz
+/EEDL2023.ALL.txt
+/EPDL2023.ALL.txt
+# The identical lossless .json.gz validation archive is tracked instead.
+/tests/validation/data/minibeam_overnight_20261030.json
+/tests/validation/data/hexagonal_holes_20261031.json
 
 # Phase-space demo outputs derive from an external (proprietary, machine-local)
 # phase-space file and are not reproducible in the repo, so they are not tracked.
@@ -41,6 +46,7 @@ examples/*.csv
 # plus the run logs they were driven from. Not reproducible here, so not tracked.
 local_*
 *.log
+/circleLattice/
 
 .vscode/
 

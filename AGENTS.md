@@ -123,7 +123,7 @@ This is test-pinned in `tests/unit/test_interface_contracts.py::test_product_int
 
 ### 2.8 Cutoffs and thresholds are accuracy-defining
 
-`ECUT` (electron production/transport cutoff, default 200 keV kinetic), `PCUT` (photon cutoff,
+`ECUT` (electron production/transport cutoff, default 25 keV kinetic), `PCUT` (photon cutoff,
 default 50 keV), and the **Dij truncation threshold** (default 1e-3 relative to the beamlet
 column maximum) are not tuning knobs.
 
