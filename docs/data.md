@@ -40,6 +40,37 @@ The build downloads `EPDL2023.ALL` and `EEDL2023.ALL` (~120 MB) from
 [www-nds.iaea.org/epics](https://www-nds.iaea.org/epics/ENDF2023/) and caches them under
 `~/.cache/pyradmc/epics`.
 
+## Sparse EEDL angular energies
+
+The nuclear first transport cross section is formed at each tabulated angular
+energy as `sigma_1 = sigma_525 * <1-cos(theta)>`. The compiler interpolates
+`(p*beta)^2 * sigma_1` in log energy, then removes the kinematic factor, where
+`p*beta = E*(E+2m)/(E+m)`. This removes the leading Coulomb energy dependence;
+remaining screening and Mott dependence is assumed smooth between angular nodes.
+See Salvat et al., [doi:10.1016/j.cpc.2004.09.006](https://doi.org/10.1016/j.cpc.2004.09.006).
+
+At each angular energy, the compiler integrates `(1-mu)*p(mu)` exactly over
+each piecewise-linear EEDL PDF cell. The product is quadratic: applying the
+trapezoid rule to its endpoint values underestimates the first moment for a
+forward-rising PDF. For example, `p(mu)=2+mu` on `[-1,1]` has normalized first
+moment `5/6`, whereas an endpoint trapezoid gives `1/2`. The PDF normalization
+itself remains an exact trapezoidal integral. This is a numerical quadrature
+correction, independent of the sparse-energy interpolation change.
+
+The former method interpolated the normalized angular moment separately from the
+total elastic cross section. Across EEDL's sparse 0.256-to-10 MeV angular gap,
+that introduces a substantial nuclear-scattering excess in low-Z materials.
+The subthreshold electron term and transport algorithm are unchanged. The
+unresolved forward angular tail remains omitted; this is not a complete upgrade
+of the differential elastic model.
+
+**Rebuild existing material files to use this correction.** Loading an old `.npz`
+retains its old scattering data. New compiler provenance records
+`reduced transport interpolation; exact linear-PDF angular product`; no runtime
+physics switch is added.
+Run `python -m examples.eedl_scattering_demo --eedl /path/to/EEDL2023.ALL`
+to save a water/tungsten comparison figure beside the example.
+
 ## Integrity
 
 **Every library is verified against a pinned SHA-256 before it is used** — freshly
@@ -63,6 +94,32 @@ validation tier against the new library and record the outcome first.
 
 ## Multiple-scattering table cache
 
+Each 512-cell row stores conditional means over the CDF intervals
+`u_i = expm1(10*i/512)/expm1(10)`, with the widest deflections near zero.
+This resolves rare angular tails that equal-probability compression suppresses
+while preserving the probability-weighted first moment before cosine clipping.
+The common scalar sampler inverts this map; reference and Warp use the same
+representation. The GS angular law, scattering strength, transport RNG draw count,
+cutoffs and table size stay unchanged. Raw construction uses randomized
+stratified inverse-CDF draws to reduce its finite-population shape noise while
+preserving each lane's uniform marginal, collision counts and azimuths. See
+[the construction measurement](decisions.md#2026-11-02-reduce-gs-construction-noise-candidate).
+Extremely rare values clipped at cosine
+-1 can slightly perturb the anchor; this representation does not remove raw
+construction sampling error. `python -m examples.gs_tail_demo` illustrates the
+angular effect without claiming a dose accuracy from the plot.
+The anchor also assumes continuous uniform probabilities. Exhaustively mapping
+Warp's 2^24 uniform values through the compiled index gives an approximately
+1.06% first-moment excess at eta0.01/theta2=1e-6 in the measured grid, but only
+about0.0012% at theta2=0.01. These are isolated angular-moment effects, not
+dose errors or a universal bound. A half-quantum midpoint diagnostic reduces
+the maximum to0.39% on those probes without eliminating it; it is not shipped
+as a sampler or RNG change.
+At very small collision means, the finite raw population can contain no
+scattered histories. Such rows retain the forward limiting approximation;
+their missing first moment is the step anchor, not necessarily the grid floor.
+This is separate from cosine clipping and from nondegenerate-row normalization.
+
 Reference and Warp transport share the deterministic Goudsmit-Saunderson grid at
 `~/.cache/pyradmc/gs-grid`. Warp precomputes its reachable rectangle; the reference
 sampler reads that file on its first node request and retains it in memory. With no
@@ -76,10 +133,10 @@ adds at least 256 nodes; smaller extensions stay serial.
 
 The cache changes startup cost only: node construction, transport seeds, cutoffs and
 dose values are unchanged. The construction version, build constants and NumPy feature
-version identify the file, including the inverse-CDF grid resolution. Existing version-1
-files that implicitly used 4096 inverse-CDF bins remain readable at that resolution;
-extensions save under the explicit identity. Geometry and source changes extend its
-window. Builds made
+version identify the file, including the inverse-CDF grid resolution and CDF
+spacing. Construction version 3 rejects old equal-probability or IID raw-construction files and rebuilds
+the affected nodes; no material cross-section recompilation is needed for this
+representation change. Geometry and source changes extend its window. Builds made
 through `build_gs_grid` with explicit grid-constant overrides remain in memory. A
 cache write failure in either backend logs a warning and retains the tables in memory.
 

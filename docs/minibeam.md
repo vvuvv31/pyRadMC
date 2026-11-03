@@ -529,3 +529,237 @@ for FMO: in the earlier 447-column main-geometry sum it reduced CTV Dmean by
 measure DVH effects for the selected geometry before choosing an export
 threshold. The engine default has not been changed. A summed plan uncertainty
 must not be inferred by quadrature-combining column sigmas.
+
+## Sparse EEDL angular interpolation
+
+The tabulated compiler now interpolates the reduced nuclear first transport
+cross section, `(p*beta)^2 * sigma_1`, across the sparse EEDL angular energies.
+This replaces separate interpolation of the normalized moment and total elastic
+rate; the subthreshold electron term and transport kernels are unchanged. There
+is no fitted dose normalization. See [data compilation](data.md#sparse-eedl-angular-energies)
+and `python -m examples.eedl_scattering_demo` for the equation and a short figure.
+Existing compiled material files must be rebuilt to apply this change.
+
+A local 840688 CT diagnostic uses a 6-degree spectral photon cone, the original
+MLC, and an 8 cm W95/Ni3.75/Fe1.25 plate with 23 tilted, equal-width 0.7 mm
+channels. Native scoring is 0.5 by 0.5 by 1 mm. GATE option3 uses 0.1 mm secondary
+production ranges, which are not electron transport energy cutoffs.
+Absolute-dose measurements use unchanged GATE geometry, physics and cuts.
+Full-head rows below use independent 32M-event reference runs; the patient
+replay uses the original shared photon packet:
+
+| Diagnostic | Historical interpolation | Reduced transport interpolation |
+|---|---:|---:|
+| Central patient-only replay, fixed 2 mm core energy bias | -2.698% | -0.472% |
+| Side039 full head, 12.5 by 25 micrometre XY raster, wide ROI bias | -2.532% | -1.293% |
+| Side039 full head, 6.25 by 12.5 micrometre XY raster, wide ROI bias | -2.152% | -0.895% |
+| Central051 full head, 12.5 by 25 micrometre XY raster, wide ROI bias | -2.559% | -1.295% |
+
+Patient replay transports the same finite photon packet through the full CT in
+both engines, omitting the head in both: it isolates a downstream component and
+is not the full minibeam calculation. GPU block SEM and GATE event SEM are
+different estimators; source covariance is unmeasured, so no independent
+two-sample significance is claimed. The full-head comparison uses 64M GPU
+histories and 32M GATE events per column. The fine-grid corrected side039 and
+central051 biases are -0.895% and -1.059%, with independent dose-ratio SEMs
+about 0.175 and 0.208 percentage points, respectively. These are integrals over a fixed region, not per-voxel
+uncertainties. No Dij column-sigma quadrature is used.
+
+The five-beam equal-fluence sum, using 64M GPU histories and 32M GATE events
+per beam, reduces the same regional bias from -4.010% on the historical grid
+and data to -1.611% with reduced interpolation and refined XY geometry. GPU
+plan-integral SEM is 0.030%, estimated from eight summed plan blocks; no GATE
+plan SEM is inferred from column sigmas. These combined gains do not isolate
+the physics contribution. The first side039 longitudinal control, 0.5 to
+0.25 mm, changes regional energy by -0.039% (paired SEM 0.030 percentage points).
+Other matched longitudinal controls change regional energy by -0.048% to
++0.065%, with paired SEMs of 0.027--0.043 percentage points. These controls
+do not identify a dominant longitudinal-raster contribution to the residual.
+Separate homogeneous 1 MeV electron controls also reveal strong
+GATE step-size sensitivity when the scoring grid is much finer than its transport
+steps; those controls do not replace the original photon reference. These local
+case inputs and generated results are not distributed with the source. The
+measurements do not establish universal accuracy for other materials or cases.
+
+The compiler also integrates the linear angular PDF's quadratic first-moment
+product exactly. A separate same-target Warp CPU control on the full central
+photon packet measures a core energy change of -0.081% (paired eight-block SEM
+0.034 percentage points) and total CT energy change of +0.003% (SEM 0.009
+percentage points), relative to reduced interpolation alone. This additional
+correction is analytically motivated and is not a fit to GATE; the full-head
+table above measures the interpolation correction alone. Exact-product full-head
+checks on the same fine XY grids give -1.001% and -1.104% for side039 and
+central051, respectively.
+
+A separate patient-only replay uses a physical GATE head-exit population,
+including photons, electrons and positrons. The larger independent population
+has 1,860,064 padded records from 32M upstream histories. GATE option3 uses
+an explicit 0.02 mm patient step limit. With both data corrections, Warp CPU
+core-energy bias is -0.536% on native electron faces and -1.040% with the
+fine head calculation's virtual XY face caps. This variation chiefly redistributes
+energy: total CT bias changes from -0.141% to -0.150%. The earlier 8M population
+gave a +0.318% native core bias; it does not establish sub-percent accuracy
+on independent populations. Its CUDA counterpart gives +0.270% on the same packet.
+
+The central full-head64M GPU tail512 control gives a -0.740% fixed wide-ROI
+bias against32M GATE events, versus -1.104% for the same exact-product
+material data with the former equal-probability table. The paired change is
++.368% with SEM.026 percentage points. This is one beam and one integral;
+it does not establish per-voxel or full-plan accuracy.
+
+The candidate GS table uses logarithmic probability intervals to resolve rare
+large-angle scattering while retaining 512 entries, the first transport moment,
+and one uniform draw per sample. See `python -m examples.gs_tail_demo`.
+The 32M patient replay then gives a -0.738% fine-face core bias and -0.158%
+total CT bias. Core Warp block SEM is 0.074% and GATE event SEM is 0.113%;
+source covariance and upstream latent variance remain unmeasured. A 512 to
+1024 entry convergence control changes core energy by +0.073% (paired SEM
+0.034 percentage points). These conditional packet comparisons exclude
+patient-to-head feedback and do not establish full-head or voxelwise accuracy.
+
+The separate brass/water holdout uses 10 cm Cu70/Zn30 at 8.5 g/cm3, five
+straight 0.5 mm slits at 2 mm pitch and a 1 cm water gap. With 128M GPU
+histories per model and 16 independent 1M TOPAS phases, both EEDL data
+corrections retain water-depth >=1 cm wide-field integrals within 0.404%.
+However, the entrance 0--4 mm integral worsens from -1.317% to -3.485%
+(TOPAS SEM 0.498%, corrected GPU SEM 0.235%). This regression remains
+unresolved. TOPAS production ranges and the GPU's energy cutoffs also differ
+in definition. The candidate is not established as a universal material or
+surface-dose improvement; independent angular-tail and boundary controls are
+required before promotion.
+
+GS raw-table construction also stratifies the inverse-CDF draws of each
+active single-collision group. This retains the marginal angular law, Poisson
+multiplicities, azimuths and 2^19 raw samples, while reducing the finite-table
+shape noise. A second/first-moment ratio diagnostic at four parameter points
+over 16 fixed construction seeds measures 12--43 times lower mean squared
+error; this improvement is not universal across higher moments and keys.
+Central full-head bias is -0.812%
+with this construction, compared with -0.740% for IID tail512; it is selected
+for construction stability rather than a closer fit to GATE. Its brass entrance
+bias remains -3.456%. The selected five-beam check is now complete: regional
+bias -1.027% versus historical -4.010% and intermediate reduced-EEDL/fine2
+-1.611%. GPU64M per column (320M total) and GATE32M per column (160M total)
+use absolute fluence. The GPU plan-integral SEM is 0.034%, from eight summed
+complete plan blocks. Existing GATE column sigmas cannot give plan uncertainty.
+The five selected column biases are -1.179/-0.642/-0.812/-1.417/-1.107%.
+These combined gains include XY-raster changes as well as physics corrections.
+Fixed 1 mm geometry-window PVDR biases at native y=-100/-50/0/50 mm are
+-1.898/-1.829/-0.414/-2.253%. Some are worse than the intermediate fine2
+calculation; a better regional integral does not imply a uniformly better PVDR.
+
+The completed central fine-profile check uses a 0.1 mm native x/z scorer,
+128M GPU histories/model and four independent 32M GATE repeats. Profiles
+average over 5 mm in native y and 5 mm in native z. Their area biases at
+native y=-97.5/-47.5/2.5/52.5 mm are -0.043/-0.959/-1.228/-0.132%,
+compared with historical -0.745/-2.068/-2.720/-1.484%. Candidate ratio
+SEMs are 0.392/0.211/0.610/0.445 percentage points. Native y is not skin
+depth. Integrating each repeat/block before estimating SEM preserves spatial
+covariance; these area results do not certify every 0.1 mm voxel.
+
+A separate selected-model CPU step-localization control uses 32M histories
+per arm on the same brass/water geometry. Fourfold electron x/z face caps
+applied only to substeps starting upstream of water increase the entrance
+integral by 1.418% (paired SEM 0.413 percentage points). Water-only caps
+change it by -0.108% (SEM 0.248), and caps everywhere by +1.406% (SEM
+0.454). Thus the observed step sensitivity chiefly originates in the
+collimator/air region. The refined entrance bias remains about -2.14%
+against TOPAS (ratio SEM 0.67 percentage points); this is a diagnostic step
+instrument, not a validated boundary-model replacement or default change.
+Splitting the upstream region further gives +1.561% (SEM 0.350 percentage
+points) for caps restricted to the collimator axial interval z=[-11,-1) cm,
+including its air channels, versus +0.104% (SEM 0.244) for only the external
+1 cm air gap. This supports localizing step sensitivity to the collimator
+interval rather than the external air gap; it does not isolate brass material
+alone or explain the full residual bias.
+
+
+An independent full-plan GATE ensemble checks reference statistics without
+replacing or selecting the original reference. Eight complete plan blocks,
+each five independent4M-event columns, total160M events. Only the passive
+scorer is cropped to the exact ROI; all physical inputs, source strata,
+transport configuration and original-script hashes are checked unchanged.
+The new ensemble mean differs from the original reference by+0.0435%.
+Its regional relativeSEM is0.0465%, versus GPU0.0335%; GPU bias against
+this independent ensemble is-1.070% with independent ratioSEM0.0567
+percentage points. Thus the roughly1% regional discrepancy is resolved beyond
+current source sampling noise, although this integral does not locate its cause.
+
+Fixed1mm-window PVDR bias against this independent ensemble is
+-2.268/-2.819/-0.008/-1.864%, with ratioSEMs0.867/1.086/1.380/0.979
+percentage points at native y=-97.5/-50/0/50mm. The first window differs from
+the primary plot's-100mm because the passive ROI ends at-100mm. These plan
+SEMs come from complete summed plan blocks, retaining peak/valley and spatial
+covariance; the original reference's planSEM is still not inferred from its
+column or voxel sigmas. These are exploratory case-specific comparisons,
+not a newly commissioned voxelwise or multi-case accuracy guarantee.
+
+
+The integrated candidate also passes the complete fast tiers on actual CPU
+and TITAN RTX CUDA:1349 passed,1 optional-CT skip,2 deselected. The full
+real-data CPU validation independently passed46 tests (2 deselected).
+A separate128M-history actualCUDA brass run uses all67 integrated candidate
+core files, with no GS or electron-step monkeypatch. All16 energy ledgers
+pass. Its entrance integral differs from the matched research implementation
+by+0.00195% with paired ratioSEM0.01135 percentage points; measured depth
+interval changes are within0.00252%. This establishes agreement at the measured
+precision, not bit identity. The integrated entrance bias against TOPAS remains
+-3.454 +/-0.517 percentage points: integration does not remove that physical
+limitation. Cutoffs, seed counts, oracle tolerances and production tally
+precision were not changed for these checks.
+
+
+## Completed selected-model brass step scan
+
+Cu70/Zn30 mass fractions,8.5g/cm3;0.5mm straight slits,2mm pitch,
+1cm exit-to-water gap. GPU128M per arm; originalTOPAS16M per geometry.
+All18arms and288energy ledgers pass. Entrance means integrate the14mm
+field and0--4mm water. SEMs are source-block regional ratio estimates,
+not voxel or Dij-column quadrature. Fourfold caps are a research
+step-convergence instrument; production step defaults remain unchanged.
+
+| Thickness/slits | Native entrance bias +/-SEM(pp) | Faces4 bias +/-SEM(pp) | Paired change +/-SEM(pp) |
+|---|---:|---:|---:|
+| t2_n1 | +0.102% +/-0.497 | +0.098% +/-0.494 | -0.004% +/-0.139 |
+| t2_n3 | -0.515% +/-0.499 | -0.383% +/-0.497 | +0.132% +/-0.130 |
+| t2_n5 | -1.110% +/-0.486 | -0.911% +/-0.481 | +0.202% +/-0.124 |
+| t5_n1 | +0.049% +/-0.567 | +0.279% +/-0.546 | +0.230% +/-0.216 |
+| t5_n3 | -0.853% +/-0.465 | -0.513% +/-0.448 | +0.344% +/-0.193 |
+| t5_n5 | -2.060% +/-0.544 | -1.609% +/-0.533 | +0.460% +/-0.200 |
+| t10_n1 | -3.020% +/-0.816 | -2.718% +/-0.817 | +0.311% +/-0.337 |
+| t10_n3 | -1.999% +/-0.715 | -1.556% +/-0.723 | +0.452% +/-0.231 |
+| t10_n5 | -3.456% +/-0.514 | -2.710% +/-0.513 | +0.772% +/-0.179 |
+
+The observed native1cm-and-deeper regional biases range -0.595% to+0.772%; faces4 range-0.664% to+0.823%.
+Entrance changes range-0.004% to+0.772% across geometries.
+These are measured regional means, not universal accuracy bounds.
+The thick-brass surface deficit remains. Step refinement alone is not
+a validated material-boundary replacement; no global step-default
+change is adopted from this scan. Fixed peak/valley diagnostics are
+retained separately in brass_shape_summary.json/brass_shape_latest.png.
+
+## Integration status and comparison provenance
+
+On 2026-11-03 the maintainer authorized integrating the selected EEDL/GS
+changes into `minibeam`. Earlier references to an unpromoted candidate
+describe the measurement stage, before this integration. The measured
+thick-brass entrance limitation remains; integration is not a claim of
+universal accuracy. Rebuild compiled material tables to obtain the EEDL
+corrections. GS cache version 3 rejects previous angular tables automatically.
+Existing Dij checkpoints and dose files retain their original physics and
+must not be mixed with newly computed columns under the changed model.
+
+The latest 840688 five-beamlet comparison sums columns 027, 039, 051, 064
+and 076 with equal weights on both sides. Fresh per-column GATE references
+and GPU runs record identical case-script and source-sampling hashes. The
+collimator placement is fixed; these are five MLC openings, not collimator
+shifts. Statistical plan repeats are also not shifts. Geometry raster
+refinement is an explicit experiment setting, not a new library default.
+
+Historical RT06071 combined 0/24/48-degree plots sum all three shifts on
+both sides (138/144/165 columns per angle). Early GPU hole geometry differs
+from that historical reference, whose absolute normalization is unknown.
+The separate-shift plots assume contiguous historical column blocks;
+first-opening shape matching supports the mapping but the original matrix
+assembly provenance is missing. Those historical plots do not establish
+transport-physics accuracy and must not motivate fitting the physics.

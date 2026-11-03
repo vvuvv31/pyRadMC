@@ -65,6 +65,10 @@ given seed.
 Both backends reuse deterministic Goudsmit-Saunderson tables from
 `~/.cache/pyradmc/gs-grid`. The reference sampler loads existing nodes and grows
 the stored window on demand, so fresh processes reuse previous table builds.
+The 512 angular cells now use logarithmic CDF spacing to retain rare large-angle
+scattering at unchanged table size, with stratified construction draws reducing
+finite-table noise. Run `python -m examples.gs_tail_demo` for
+the angular comparison; see [table construction](docs/data.md#multiple-scattering-table-cache).
 
 ## Small photon fields
 
@@ -80,6 +84,14 @@ unchanged photon cutoff, and remaining interface limitations are documented in
 [small-field accuracy](docs/minibeam.md). Brass material support remains experimental.
 The inverse-range lookup retains the zero-range cutoff endpoint, preventing
 artificially stalled collisional loss in fine-step convergence checks.
+Tabulated nuclear scattering now interpolates the reduced first transport cross
+section across sparse EEDL angular energies and integrates the angular PDF product
+exactly. Rebuild material tables to apply the
+correction; see [data compilation and example](docs/data.md#sparse-eedl-angular-energies).
+GS sampling resolves rare large-angle tails with logarithmic probability cells
+at unchanged table size and scattering strength. Run `python -m examples.gs_tail_demo`;
+[measured limitations](docs/minibeam.md#sparse-eedl-angular-interpolation) include
+an unresolved brass entrance-dose regression.
 
 Circular-hole slabs on a hexagonal lattice are available through
 `pyradmc.geometry.holes.HexagonalHoleCollimator`. The builder paints explicit

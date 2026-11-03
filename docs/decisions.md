@@ -70,6 +70,8 @@ implementation combines EEDL nuclear scattering with the same analytic subthresh
 electron moment (its 15 MeV axial excess fell from +11 % to +8 %; at 6 MeV it now
 overscatters slightly, build-up 1.03, because EEDL's nuclear moment is interpolated
 across its 0.256-10 MeV shape gap and sits 1.1-1.3x the closed form at 1-6 MeV).
+These ratios describe the historical normalized-moment interpolation, superseded
+on 2026-11-02 by reduced-transport interpolation (see [data compilation](data.md#sparse-eedl-angular-energies)).
 Stated omission: no Mott (spin-relativistic) factor on the
 closed-form moment, a few percent at `beta -> 1` in low-Z media.
 
@@ -333,3 +335,168 @@ zero loss away from the inverse-table floor. Treat distance refinement as
 numerically contaminated until independently checked; a private midpoint
 stopping-power instrument is being measured, without adding a production flag
 or changing the reference. A log-energy probe is not a dose-error bound.
+
+## 2026-11-02: Interpolate the nuclear transport quantity
+
+Sparse EEDL angular distributions and denser total elastic rates have different
+energy curvature. Interpolating their normalized angular mean independently
+transfers the total-rate curvature into the first transport cross section.
+Form sigma1 at angular-energy nodes and interpolate its reduced value
+`(p*beta)^2 * sigma1`, removing the leading Coulomb dependence analytically.
+A synthetic Coulomb-scaling test fails with the old method by 24% at 1 MeV.
+Independent installed DPWA differential data support the new energy trend;
+these research data are not a new library dependency. No fitted scattering
+normalization or runtime model switch is introduced. The forward angular tail
+remains omitted and the screened-Rutherford angular family remains unchanged.
+
+This data correction reduces a fixed-packet CT core-dose bias from -2.70% to
+-0.47% against the original GATE option3 benchmark. A full five-beam calculation,
+also refining the rectilinear XY geometry, changes the regional dose bias from
+-4.01% to -1.61% against independent 32M-event GATE references per beam. These
+are case-specific regional integrals, not per-voxel or universal accuracy.
+
+An independent quadrature correction integrates `(1-mu)*p(mu)` exactly for
+the EEDL piecewise-linear PDF. The quadratic product is not trapezoidal:
+`p=2+mu` on `[-1,1]` gives a normalized moment5/6, not1/2. Analytic,
+cell-subdivision and independent Gauss-quadrature tests establish this without
+an external dose fit. On the full common CT packet, exact product integration
+changes the core energy by -0.081% (paired-block SEM0.034 percentage points)
+relative to reduced interpolation alone. Full-head exact-product controls give
+regional biases of -1.001% and -1.104% for side039 and central051. Both
+corrections require rebuilding compiled material data; they do
+not change transport kernels or electron production cutoffs.
+
+
+## 2026-11-02: Resolve rare GS tails at fixed table size (candidate)
+
+Equal-probability compression replaces the widest-angle tail by one
+conditional mean. It preserves the first transport moment but suppresses
+higher moments, especially for short, face-capped electron steps. Use CDF
+edges `u_i=expm1(10*i/n)/expm1(10)` and integrate the empirical inverse CDF
+within each interval. Probability-weighted normalization keeps the same
+first-moment anchor before cosine clipping. No scattering strength or dose
+scale is fitted; the raw screened-Rutherford GS construction is unchanged.
+The sampler still draws once and the default row still has512 entries.
+Construction-cache version3 includes the CDF spacing and the stratified raw
+construction described below, and rejects older rows.
+Goudsmit & Saunderson (1940), doi:10.1103/PhysRev.57.24.
+
+An analytic screened-Rutherford tail regression demonstrates the second-moment
+compression error independently of transport. Two independent upstream
+physical-packet populations give core-dose changes of+.412 and+.305 percentage
+points in fine-face CT replay, with paired-block SEM.082 and.059 points.
+The native-face change is unresolved. The central full-head GPU control improves the fixed regional bias from
+-1.104% to -0.740% against32M GATE events, with64M GPU histories and a
+paired change of+.368% (SEM.026 percentage points). The separate brass
+entrance0--4mm remains discrepant: -3.352% with tail512 versus -3.485%
+with corrected EEDL alone. This candidate is not yet promoted to the
+working minibeam branch. The logarithmic map is representation
+resolution, not a user-selectable physical model. Raw-construction sampling
+error and rare cosine clipping remain limitations.
+
+
+The long-step construction oracle retains its historical maximum probability
+cell size1/4096. Equal entry counts are unequal resolution after the CDF map
+changes:4096 logarithmic cells have maximum probability.002439, versus
+.0002441 for4096 uniform cells. For this construction-only instrument choose
+`ceil(4096*span/(1-exp(-span)))` entries, from the CDF derivative bound.
+At the unchanged200000 draws, fixed seed,20 histogram bins andp>.001 gate,
+the independently composed Lambda500 comparison changes fromchi2=45.17,
+p=.000648 tochi2=18.08,p=.517. This corrects the oracle's resolution, not
+its threshold or source count. Production512-cell compression keeps separate
+first-moment, higher-moment and exact discrete-sampler tests.
+
+## 2026-11-02: Reduce GS construction noise (candidate)
+
+The fixed finite raw GS population is part of the numerical approximation.
+Increasing it from 2^19 to 2^21 or 2^22 changes a fixed-packet CT core integral
+nonmonotonically, by +0.366% and +0.146%. Do not select a construction seed or
+count by its agreement with GATE. Instead, for each set of k active single
+collisions, randomly assign one jittered inverse-CDF draw from each stratum.
+Every lane's marginal remains uniform; Poisson multiplicities, azimuth law,
+scattering strength and default raw count are unchanged. McKay et al. (1979),
+doi:10.1080/00401706.1979.10489755.
+
+Against analytic GS transport-moment ratios at four screening/path points,
+16 fixed construction seeds and 65536 raw samples, stratification reduces mean
+squared shape error by factors of 12--43. A deterministic single-collision test
+checks exact CDF stratum coverage independently of dose. The persistent grid
+construction version advances to 3 so previous IID rows cannot be reused.
+
+A broader independent raw-moment ensemble uses 64 seeds, 65536 samples,
+eta=0.001/0.01/0.1 and Lambda=0.05/0.5/2/50, without first-moment
+renormalization. Its first, second, fourth and eighth transport-moment mean
+biases are within 1.56 ensemble SEM of the analytic values. This does not
+prove zero bias. Low-order MSE usually decreases, but the eighth moment at
+Lambda50 and eta0.001/0.01 has about 1.90/1.97 times the IID MSE. The
+12--43-fold improvement above applies to its specific shape-ratio diagnostic,
+not every moment or key.
+
+An independent central full-head 64M-history GPU control has a -0.812% regional
+bias against 32M GATE events, versus -0.740% with IID tail512. This is not an
+additional dose-fit improvement. The held-out brass entrance changes by
+-0.108% (paired SEM 0.116 percentage points), retaining an unresolved -3.456%
+bias. Selection is based on independently measured construction stability;
+the selected five-beam check is now complete. At 64M GPU histories per
+column versus 32M GATE events per column, the five-column fixed ROI bias is
+-1.027%, compared with historical -4.010% and the earlier reduced-EEDL/fine2
+result -1.611%. The combined changes include raster refinement and cannot
+be attributed to angular physics alone. GPU plan-integral SEM is 0.034%,
+computed from eight complete summed plan blocks. Existing GATE column
+uncertainties do not establish a plan SEM. Fixed 1 mm geometry-window PVDR
+biases at native y=-100/-50/0/50 mm are -1.898/-1.829/-0.414/-2.253%.
+Some worsen relative to the intermediate fine2 result; integral-dose improvement
+is not universal improvement of the peak/valley structure. The completed 0.1 mm fine-profile
+check uses 128M GPU histories/model and four independent 32M GATE repeats.
+At native y=-97.5/-47.5/2.5/52.5 mm, profile-area biases are
+-0.043/-0.959/-1.228/-0.132%, with ratio SEMs
+0.392/0.211/0.610/0.445 percentage points. Native y is not skin depth.
+Each area is integrated before its repeat/block SEM is estimated.
+
+The fixed-seed constant-SPR Dij identity test exposed a numerical-oracle
+limitation after the angular construction changed which voxels were sparsely
+hit. At the default 1e-9 MeV score quantum, one voxel differed by 3.75e-13
+MeV/g per primary: 0.6 normalized quanta, but 2.72e-5 relative. Repeating
+the same 800 histories, seed and transport at 1e-10 and 1e-11 MeV score
+precision reduces the maximum relative discrepancy below 1e-6. The identity
+test now explicitly uses the finer tally as a numerical test instrument,
+retaining the original 1e-5 assertion, histories and seed. Its bounded energy
+is far below int64 capacity; the fixture restores and recompiles default
+constants afterwards. Production tally precision is unchanged. Default-score
+forward identities and CPU/CUDA scheduling tests remain separate checks.
+
+The real multi-material compiler validation also retained the historical
+200 keV cutoff while compiling at the current 25 keV default. Explicit
+library-enabled runs reproduce the source's expected cutoff-mismatch error.
+The oracle now imports ECUT_MEV, matching the previously corrected water
+compiler validation; no stopping-power or mixing tolerance is changed.
+
+
+An independent full-plan GATE ensemble checks reference statistics without
+replacing or selecting the original reference. Eight complete plan blocks,
+each five independent4M-event columns, total160M events. Only the passive
+scorer is cropped to the exact ROI; all physical inputs, source strata,
+transport configuration and original-script hashes are checked unchanged.
+The new ensemble mean differs from the original reference by+0.0435%.
+Its regional relativeSEM is0.0465%, versus GPU0.0335%; GPU bias against
+this independent ensemble is-1.070% with independent ratioSEM0.0567
+percentage points. Thus the roughly1% regional discrepancy is resolved beyond
+current source sampling noise, although this integral does not locate its cause.
+
+Fixed1mm-window PVDR bias against this independent ensemble is
+-2.268/-2.819/-0.008/-1.864%, with ratioSEMs0.867/1.086/1.380/0.979
+percentage points at native y=-97.5/-50/0/50mm. The first window differs from
+the primary plot's-100mm because the passive ROI ends at-100mm. These plan
+SEMs come from complete summed plan blocks, retaining peak/valley and spatial
+covariance; the original reference's planSEM is still not inferred from its
+column or voxel sigmas. These are exploratory case-specific comparisons,
+not a newly commissioned voxelwise or multi-case accuracy guarantee.
+
+
+The selected-model held-out step scan completes all18 arms:2/5/10cm brass,
+1/3/5slits, native and fourfold face caps,128M GPU histories per arm against
+original16M TOPAS references. All288 energy ledgers pass. The entrance
+response is geometry-dependent and the thick-brass deficit remains; no
+uniform step-default change is adopted. See docs/minibeam.md for regional
+means and paired source-block uncertainties. The boundary approximation
+requires a consistent path/material/scattering replacement, not dose scaling.
