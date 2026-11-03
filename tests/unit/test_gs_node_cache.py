@@ -291,7 +291,8 @@ def test_mu_resolution_is_part_of_both_cache_keys(
     monkeypatch.setattr(gs, "_GS_GRID_CACHE_DIR", tmp_path)
     row = gs.gs_grid_node(-46, -111)
     assert (
-        gs._node_cache[(math.exp(-46 / 4), math.exp(-111 / 4), 512, 2048, gs._RAW_SAMPLES)] is row
+        gs._node_cache[(math.exp(-46 / 4), math.exp(-111 / 4), 512, 2048, gs._RAW_SAMPLES, 10.0)]
+        is row
     )
     assert not any(key[3] == 4096 for key in gs._node_cache)
 
@@ -352,25 +353,25 @@ def test_failed_save_removes_partial_and_preserves_existing_file(
     assert not list(tmp_path.glob("*.partial*"))
 
 
-def test_legacy_default_mu_cache_is_reused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_equal_probability_cache_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     import hashlib
 
     import pyradmc.data.goudsmit_saunderson as gs
 
-    # Historical key: inverse-CDF resolution was implicitly fixed at 4096.
-    key = gs._grid_cache_key()[:-1]
-    path = tmp_path / f"gs-grid-{hashlib.sha256(repr(key).encode()).hexdigest()[:16]}.npz"
-    np.savez(path, values=np.ones((2, 2, 512)), ix0=-46, iy0=-111, key=repr(key))
+    # The v1 equal-probability rows cannot be sampled with the new CDF mapping.
+    key = list(gs._grid_cache_key())
+    key[0] = 1
+    del key[1]  # v1 did not encode logarithmic probability span.
+    legacy = tuple(key)
+    path = tmp_path / f"gs-grid-{hashlib.sha256(repr(legacy).encode()).hexdigest()[:16]}.npz"
+    np.savez(path, values=np.ones((2, 2, 512)), ix0=-46, iy0=-111, key=repr(legacy))
+    assert gs._load_grid_cache(path) is None
     monkeypatch.setattr(gs, "_GS_GRID_CACHE_DIR", tmp_path)
-
-    def refuse(*args: object, **kwargs: object) -> None:
-        raise AssertionError("the compatible legacy grid must be reused")
-
-    monkeypatch.setattr(gs, "_gs_raw_cosines", refuse)
     rows = gs.gs_grid_nodes(-46, -111)
-    assert all(np.array_equal(row, np.ones(512)) for row in rows)
-    monkeypatch.setattr(gs, "_GS_TABLE_MU_BINS", 2048)
-    assert gs._load_grid_cache(gs._grid_cache_file(tmp_path)) is None
+    assert all(np.array_equal(row, np.zeros(512)) for row in rows)
+    assert gs._grid_cache_file(tmp_path).exists()
 
 
 def test_parallel_extension_rebuilds_identical_nontrivial_rows(

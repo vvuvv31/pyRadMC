@@ -10,18 +10,25 @@ through :meth:`~pyradmc.data.interface.CrossSectionSource.sample_gs_cos_theta`,
 the same split the coherent form-factor sampler uses (AGENTS.md section 2.6).
 
 **The table is in a scaled deflection** ``w = (1 - mu) / <1 - mu>``, held as bin
-averages over equal-probability bins and normalized so that ``<w> = 1``. That is
+conditional means over logarithmic-probability CDF intervals, normalized so
+that the probability-weighted ``<w> = 1``. That is
 not a storage convenience, it is what keeps the model anchored: the table is
 looked up at a *binned* screening parameter and step length, and rescaling by the
 caller's exact ``<1 - cos theta> = 1 - e^{-<theta^2>/2}`` makes the first moment
-come out exact regardless of how coarse the binning is. ``<1 - cos>`` is the
+come out exact for nondegenerate rows before cosine clipping, regardless of how
+coarse the binning is. ``<1 - cos>`` is the
 anchor rather than ``<theta^2>`` because it is the moment Goudsmit-Saunderson
 theory pins exactly (``<cos> = e^{-Lambda G_1}``) and the one the mass scattering
 power encodes; ``<theta^2>`` is tail-dominated for a heavy-tailed law. Table
 resolution therefore perturbs only the *shape* of the deflection — never its
-strength — so a transport-level comparison against the Gaussian hinge measures
+strength before clipping — so a transport-level comparison against the Gaussian hinge measures
 the large-angle tail that Goudsmit-Saunderson adds, and not a residual
 mis-scaling of the table.
+
+This anchor is an exact property of the continuous cell probabilities and
+real-valued arithmetic. A finite uniform lattice, float arithmetic and cosine
+clipping introduce additional numerical error; it is not an exact guarantee
+for every compiled sampler realization.
 
 Goudsmit & Saunderson, Phys. Rev. 57, 24 (1940), doi:10.1103/PhysRev.57.24.
 """
@@ -31,9 +38,22 @@ from __future__ import annotations
 import math
 
 from pyradmc.data.handles import Table1D, Table3D
+from pyradmc.data.interface import _GS_PROBABILITY_LOG_SPAN, _GS_PROBABILITY_SCALE
 from pyradmc.rng import RNGState, uniform
 
-__all__ = ["sample_gs_cos_theta_bilinear", "sample_gs_cos_theta_grid"]
+__all__ = ["gs_probability_index", "sample_gs_cos_theta_bilinear", "sample_gs_cos_theta_grid"]
+
+
+def gs_probability_index(u: float, n_u: int) -> int:
+    r"""Index the CDF interval with edges expm1(a i/n)/expm1(a), a=10.
+
+    Inverting those edges gives i=floor(n log1p(u expm1(a))/a). Narrow cells
+    near u=0 retain rare wide-angle contributions to higher GS moments;
+    the stored conditional means preserve the first moment with these cell
+    probabilities. Goudsmit & Saunderson (1940), doi:10.1103/PhysRev.57.24.
+    """
+    coordinate = math.log1p(u * _GS_PROBABILITY_SCALE) / _GS_PROBABILITY_LOG_SPAN
+    return min(max(int(coordinate * float(n_u)), 0), n_u - 1)
 
 
 def sample_gs_cos_theta_bilinear(
@@ -62,7 +82,7 @@ def sample_gs_cos_theta_bilinear(
     move to the GPU. Only the *sampled node* is blended, never a whole table, so
     the cost is per-sample constant.
 
-    Safe for the anchoring by construction: each row is normalized to unit mean,
+    Safe for the anchoring by construction: each row has probability-weighted unit mean,
     and the bilinear weights sum to one, so the blend also has unit mean. The
     deflection's strength therefore stays exactly the caller's
     ``<1 - cos theta>`` regardless of where between the grid nodes this lands —
@@ -78,7 +98,7 @@ def sample_gs_cos_theta_bilinear(
         Fractional position between the bracketing nodes in ``eta`` and
         ``<theta^2>`` respectively, each in ``[0, 1]``.
     n_u
-        Equal-probability bins per row.
+        Logarithmic-probability CDF intervals per row.
     mean_square_angle
         The substep's ``<theta^2> = T rho s`` in rad^2.
     rng_state
@@ -86,10 +106,7 @@ def sample_gs_cos_theta_bilinear(
     """
     if mean_square_angle <= 0.0:
         return 1.0
-    u = uniform(rng_state) * float(n_u)
-    index = int(u)
-    if index > n_u - 1:
-        index = n_u - 1
+    index = gs_probability_index(uniform(rng_state), n_u)
 
     w_lo = float(row_00[index]) * (1.0 - tx) + float(row_10[index]) * tx
     w_hi = float(row_01[index]) * (1.0 - tx) + float(row_11[index]) * tx
@@ -124,7 +141,7 @@ def sample_gs_cos_theta_grid(
     Keys outside the window clamp to the edge node pair. A correctly derived
     window is never exceeded (the coverage is test-pinned from the flattened
     transport tables), so the clamp only guards float dust at the edges; and
-    because every row is unit-mean, clamping perturbs only the deflection's
+    because every row has weighted unit mean, clamping perturbs only the deflection's
     shape — the strength stays the caller's exact ``<1 - cos theta>``.
 
     Parameters
@@ -137,7 +154,7 @@ def sample_gs_cos_theta_grid(
     n_eta, n_theta2
         Window extent in nodes along each axis.
     n_u
-        Equal-probability bins per row.
+        Logarithmic-probability CDF intervals per row.
     fx, fy
         Fractional grid coordinates of the query,
         ``log(eta) * bins_per_log`` and ``log(<theta^2>) * bins_per_log``

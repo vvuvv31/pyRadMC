@@ -53,7 +53,17 @@ not chosen by eye.
 """
 
 _GS_TABLE_NODES: int = 512
-"""Equal-probability bins per Goudsmit-Saunderson deflection table."""
+"""Logarithmic-probability bins per Goudsmit-Saunderson deflection table."""
+
+_GS_PROBABILITY_LOG_SPAN: float = 10.0
+"""CDF edges are expm1(10 i/n)/expm1(10), resolving rare wide deflections.
+
+The widest-angle cell carries about9e-7 probability at512 bins, comparable
+to one raw construction sample. Conditional means and their true probabilities
+preserve the first moment without merging the rare tail into a large atom.
+"""
+
+_GS_PROBABILITY_SCALE: float = math.expm1(_GS_PROBABILITY_LOG_SPAN)
 
 _GS_THETA2_MIN: float = 1.0e-12
 """Floor on the binned ``<theta^2>``; below this a substep deflects immeasurably

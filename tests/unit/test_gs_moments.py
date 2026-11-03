@@ -19,6 +19,8 @@ is a chi-squared-free moment test because the moments have closed forms.
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 import pytest
 
@@ -218,20 +220,25 @@ class TestGoudsmitSaundersonSampling:
         rng = np.random.default_rng(SEED)
 
         g1 = first_transport_moment(eta)
-        # Built by the production constructor, but at finer atom granularity
-        # than the production 512: a histogram oracle over a 512-atom discrete
-        # distribution sees edge-straddling atoms as shape error (measured:
-        # chi2 48.6 at 512 atoms falling to 17.2 at 4096 and flat beyond, on a
-        # 19-dof test — a discretization artifact, not a distribution defect).
-        # This test validates the CONSTRUCTION; the production granularity is
-        # covered by the exact first-moment anchoring test and by
-        # TestBinningFidelity in tests/unit/test_gs_sampler.py.
-        n_u = 4096
+        from pyradmc.data.interface import _GS_PROBABILITY_LOG_SPAN
+
+        # This oracle isolates construction, using the original test's maximum
+        # cell probability 1/4096. A logarithmic row of 4096 entries has cells
+        # ten times wider near u=1; equal entry counts are not equal resolution.
+        # The CDF derivative bounds each probability by span/(n*(1-exp(-span))).
+        # Keep the same draw count, seed, 20 bins and chi-squared threshold;
+        # production's 512-entry compression is checked separately by the
+        # anchoring and binning-fidelity tests.
+        span = _GS_PROBABILITY_LOG_SPAN
+        n_u = math.ceil(4096 * span / -math.expm1(-span))
+        probabilities = np.diff(np.expm1(np.arange(n_u + 1) * span / n_u) / np.expm1(span))
+        assert probabilities.max() <= 1 / 4096
         table = gs_scaled_deflection_table(eta, 2.0 * lam * g1, n_u=n_u)
         # Draw exactly as the production sampler does: one uniform indexes an
-        # equal-probability bin, and the bin-average deflection is rescaled by
+        # logarithmic-probability bin, and its conditional mean is rescaled by
         # the exact anchor <1 - cos> = 1 - e^{-Lambda G_1}.
-        index = np.minimum((rng.random(n) * n_u).astype(int), n_u - 1)
+        coordinate = np.log1p(rng.random(n) * np.expm1(span)) / span
+        index = np.minimum((coordinate * n_u).astype(int), n_u - 1)
         sampled = np.maximum(-1.0, 1.0 - table[index] * -np.expm1(-lam * g1))
 
         reference = _brute_force_cosines(lam, eta, n, rng)

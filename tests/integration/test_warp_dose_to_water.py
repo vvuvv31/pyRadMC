@@ -10,6 +10,8 @@ change.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 import numpy as np
 import pytest
 
@@ -75,6 +77,34 @@ def _run(engine, mode: str, n: int = 4_000):
     )
 
 
+@pytest.fixture
+def fine_spr_tally(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
+    """Numerical test instrument isolating SPR weighting from quantization.
+
+    A sparsely hit voxel can contain only 2e-5 MeV before normalization.
+    Independent rounding of E and SPR*E at the default 1e-9 MeV quantum
+    cannot satisfy a purely relative 1e-5 identity there. Fixed-seed
+    convergence at 1e-9/1e-10/1e-11 resolves this without changing histories,
+    transport, seed or the assertion. These 800*6 MeV columns remain far
+    below int64 capacity. Production precision and its other tests stay fixed.
+    """
+    from pyradmc.backends.warp import engine as module
+    from pyradmc.backends.warp import kernels
+
+    compiled = wp.get_module(kernels.__name__)
+    try:
+        with monkeypatch.context() as precision:
+            precision.setattr(kernels, "ENERGY_QUANTUM_MEV", 1e-11)
+            precision.setattr(kernels, "_INV_QUANTUM", 1e11)
+            precision.setattr(module, "ENERGY_QUANTUM_MEV", 1e-11)
+            compiled.mark_modified()
+            yield
+    finally:
+        # The context has restored host constants even if an assertion failed.
+        # Force subsequent launches to reload the default compiled constants.
+        compiled.mark_modified()
+
+
 def test_water_dose_to_water_is_bit_identical_to_dose_to_medium(device: str) -> None:
     engine = _water_engine(device)
     dm = _run(engine, "dose_to_medium")
@@ -106,7 +136,7 @@ def test_uniform_medium_scales_by_the_constant_spr(device: str) -> None:
     )
 
 
-def test_dij_column_scales_by_the_constant_spr(device: str) -> None:
+def test_dij_column_scales_by_the_constant_spr(device: str, fine_spr_tally: None) -> None:
     engine = _medium_engine(device)
     lattice = BeamletGridSource(
         energy=6.0, z=-1.0, x_range=(2.0, 14.0), y_range=(2.0, 14.0), n_x=2, n_y=1

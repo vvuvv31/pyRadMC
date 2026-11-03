@@ -14,6 +14,9 @@ and the properties the transport-level (L1) comparison depends on:
 
 from __future__ import annotations
 
+import math
+from itertools import pairwise
+
 import numpy as np
 import pytest
 
@@ -26,6 +29,48 @@ def _draw(source: object, theta2: float, energy: float, material: int, n: int) -
     return np.array(
         [source.sample_gs_cos_theta(theta2, energy, material, rng) for _ in range(n)]  # type: ignore[attr-defined]
     )
+
+
+def _gs_cells(theta2: float, energy: float, material: int) -> tuple[np.ndarray, np.ndarray]:
+    """Actual CDF cells for exact population moments, including rare tails."""
+    from pyradmc.data.analytic import AnalyticCrossSections
+    from pyradmc.data.goudsmit_saunderson import gs_grid_nodes
+    from pyradmc.data.interface import _GS_BINS_PER_LOG
+
+    source = AnalyticCrossSections()
+    fx = math.log(source.elastic_screening(energy, material)) * _GS_BINS_PER_LOG
+    fy = math.log(theta2) * _GS_BINS_PER_LOG
+    ix, iy = math.floor(fx), math.floor(fy)
+    tx, ty = fx - ix, fy - iy
+    a, b, c, d = gs_grid_nodes(ix, iy)
+    w = ((1 - tx) * a + tx * b) * (1 - ty) + ((1 - tx) * c + tx * d) * ty
+    edges = np.expm1(np.arange(len(w) + 1) * 10.0 / len(w)) / np.expm1(10.0)
+    return edges, np.minimum(2.0, w * -np.expm1(-theta2 / 2))
+
+
+def _paired_population_sem(theta2: float, material: int, n: int) -> float:
+    """SEM of GS-minus-Gaussian with the same uniform, from the full laws.
+
+    Empirical variance misses rare wide angles when a fixed sample contains
+    none. Integrate each known GS CDF cell against the analytic Gaussian hinge;
+    retain the original seed, count and4sigma gate, including their covariance.
+    """
+    from scipy.integrate import quad
+
+    edges, gs = _gs_cells(theta2, 1.0, material)
+    probability = np.diff(edges)
+
+    def hinge(u: float) -> float:
+        theta = math.sqrt(-theta2 * math.log1p(-u))
+        return 1 - math.cos(min(theta, math.pi))
+
+    first = np.array(
+        [quad(hinge, float(lo), float(hi), epsabs=1e-18)[0] for lo, hi in pairwise(edges)]
+    )
+    second = quad(lambda u: hinge(u) ** 2, 0.0, 1.0, epsabs=1e-18)[0]
+    mean = float(probability @ gs - first.sum())
+    variance = float(probability @ gs**2 - 2 * gs @ first + second - mean**2)
+    return math.sqrt(variance / n)
 
 
 class TestFirstMomentAnchoring:
@@ -53,7 +98,11 @@ class TestFirstMomentAnchoring:
         measured = float(np.mean(one_minus_cos))
         expected = -np.expm1(-0.5 * theta2)
 
-        sem = float(np.std(one_minus_cos)) / np.sqrt(n)
+        edges, cells = _gs_cells(theta2, 1.0, WATER)
+        probabilities = np.diff(edges)
+        population_mean = float(probabilities @ cells)
+        assert abs(population_mean - expected) < 1.0e-3 * expected
+        sem = math.sqrt(float(probabilities @ (cells - population_mean) ** 2) / n)
         assert abs(measured - expected) < 4.0 * sem + 1.0e-3 * expected, (
             f"requested <1-cos>={expected:.4e}, sampled {measured:.4e} (4 sem={4 * sem:.2e})"
         )
@@ -108,21 +157,13 @@ class TestBinningFidelity:
     def test_binned_table_matches_the_exact_distribution(self) -> None:
         """Chi-squared: the grid lookup vs a table built at the exact parameters.
 
-        Runs at high build statistics, in the validation tier, because the
-        residual this measures is **Monte-Carlo noise in the table build**, not a
-        modelling error, and it converges away. Measured chi-squared at
-        ``<theta^2> = 0.02 / 0.05`` against build samples: 73.6 / 137.3 at 2^19,
-        51.3 / 71.5 at 2^21, 25.8 / 36.2 at 2^23 — the ``1/sqrt(N)`` fall of a
-        noise term.
-
-        That convergence is the load-bearing result for the whole table design.
-        The two error sources are separable and neither needs a finer grid:
-        *interpolation* error is removed by the bilinear lookup (which is why
-        ``<theta^2>`` values landing between grid nodes already pass at the
-        default statistics), and *build noise* costs only **linearly** in
-        samples, where refining the two-dimensional grid would cost
-        quadratically — 16 bins per log ran to ~10k tables and ~20 MB, against
-        ~1.1 MB for the full grid at the shipped 4 per log.
+        This uses the existing high-statistics construction to isolate grid
+        interpolation from noise in the empirical GS build. Historical
+        equal-probability tables converged as 1/sqrt(N_build); retaining rare
+        angular tails does not remove that source of uncertainty. The test
+        keeps its original build statistics, draw count, seeds and p-value
+        gate. Histogram boundaries lie between the discrete angular atoms so
+        that tiny interpolation shifts do not move a whole atom between bins.
         """
         from scipy import stats
 
@@ -148,10 +189,19 @@ class TestBinningFidelity:
         eta = source.elastic_screening(energy, WATER)
         exact_table = gs_scaled_deflection_table(eta, theta2, n_u=512)
         rng = np.random.default_rng(SEED + 1)
-        w = exact_table[np.minimum((rng.random(n) * 512).astype(int), 511)]
+        coordinate = np.log1p(rng.random(n) * np.expm1(10.0)) / 10.0
+        w = exact_table[np.minimum((coordinate * 512).astype(int), 511)]
         exact = np.maximum(-1.0, 1.0 - w * -np.expm1(-0.5 * theta2))
 
         edges = np.quantile(1.0 - exact, np.linspace(0.0, 1.0, 21))
+        # Conditional means are discrete atoms. Quantile edges at an atom
+        # make a minute interpolation shift reassign its entire probability.
+        # Place each boundary between neighbouring atoms, with the same bins,
+        # build/draw statistics, seeds and significance gate as before.
+        atoms = np.unique(1.0 - exact)
+        split = np.searchsorted(atoms, edges[1:-1], side="right")
+        split = np.clip(split, 1, len(atoms) - 1)
+        edges[1:-1] = (atoms[split - 1] + atoms[split]) / 2
         edges[0], edges[-1] = 0.0, 2.0
         obs, _ = np.histogram(1.0 - binned, bins=edges)
         exp, _ = np.histogram(1.0 - exact, bins=edges)
@@ -384,7 +434,7 @@ class TestDepartureFromTheGaussianHinge:
         hinge = 1.0 - np.array([sample_hinge_cos_theta(theta2, rng) for _ in range(n)])
 
         a, b = float(np.mean(gs)), float(np.mean(hinge))
-        sem = np.hypot(np.std(gs), np.std(hinge)) / np.sqrt(n)
+        sem = _paired_population_sem(theta2, WATER, n)
         assert abs(a - b) < 4.0 * sem, (
             f"<1-cos> differs between samplers at {theta2}: GS {a:.5e} vs hinge {b:.5e}"
         )

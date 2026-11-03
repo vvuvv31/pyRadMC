@@ -186,6 +186,14 @@ class TestDistribution:
         device = device_draws[:, column].astype(np.float64)
 
         edges = np.quantile(1.0 - host, np.linspace(0.0, 1.0, 21))
+        # The sampler returns discrete conditional means. A quantile can land
+        # exactly on an atom: host/device rounding then reassigns its entire
+        # probability to a neighbouring histogram bin. Put boundaries between
+        # atoms instead, retaining the same 20 bins, seeds, N and p-value gate.
+        atoms = np.unique(1.0 - host)
+        split = np.searchsorted(atoms, edges[1:-1], side="right")
+        split = np.clip(split, 1, len(atoms) - 1)
+        edges[1:-1] = (atoms[split - 1] + atoms[split]) / 2
         edges[0], edges[-1] = 0.0, 2.0
         obs, _ = np.histogram(1.0 - device, bins=edges)
         exp, _ = np.histogram(1.0 - host, bins=edges)

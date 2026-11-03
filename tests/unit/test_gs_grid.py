@@ -97,15 +97,16 @@ class TestGridConstruction:
             fy = math.log(theta2) * bins
             assert 0 <= math.floor(fy) - small_grid.iy0 <= small_grid.values.shape[1] - 2
 
-    def test_rows_are_unit_mean_or_degenerate_zero(self, small_grid) -> None:
-        """Each table is the scaled deflection: mean exactly 1, or all-zero.
+    def test_rows_are_weighted_unit_mean_or_degenerate_zero(self, small_grid) -> None:
+        """Each table has probability-weighted mean exactly 1, or is all-zero.
 
         Unit mean per row is what makes the bilinear blend anchor-safe on the
         device — the blend of unit-mean rows has unit mean, so the first moment
         stays the caller's exact ``<1 - cos>`` wherever the lookup lands.
         """
         assert np.isfinite(small_grid.values).all()
-        means = small_grid.values.mean(axis=2)
+        edges = np.expm1(np.arange(small_grid.n_u + 1) * 10.0 / small_grid.n_u) / np.expm1(10.0)
+        means = small_grid.values @ np.diff(edges)
         degenerate = np.all(small_grid.values == 0.0, axis=2)
         np.testing.assert_allclose(means[~degenerate], 1.0, rtol=1e-12)
 

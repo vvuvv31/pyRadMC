@@ -581,6 +581,13 @@ def _mc_gs_cosines(eta: float, lam: float, n: int, rng: np.random.Generator) -> 
     sample: a random matching, exact in the marginals, and the residual pairing
     correlation is checked by validating this construction against the series in
     the regime where the series is trustworthy.
+
+    For each set of ``k`` active collisions, randomly assign one jittered
+    inverse-CDF draw ``(j + U_j)/k`` from each of the ``k`` strata. Every lane's
+    marginal is still uniform; collision counts and azimuths are unchanged.
+    This reduces finite-table angular-shape noise rather than changing the GS
+    law or its first-moment normalization. Stratified sampling: McKay et al.
+    (1979), doi:10.1080/00401706.1979.10489755.
     """
     doublings = max(0, math.ceil(math.log2(lam)) if lam > 1.0 else 0)
     lam_0 = lam / (2.0**doublings)
@@ -594,7 +601,7 @@ def _mc_gs_cosines(eta: float, lam: float, n: int, rng: np.random.Generator) -> 
         if k == 0:
             break
         # Vectorized over the active lanes; the scalar form is the same algebra.
-        xi = rng.random(k)
+        xi = rng.permutation((np.arange(k) + rng.random(k)) / k)
         inverse = xi / (2.0 * eta * (1.0 + eta)) + 1.0 / (2.0 + 2.0 * eta)
         single = 1.0 + 2.0 * eta - 1.0 / inverse
         cos_acc[active] = _compose(cos_acc[active], single, rng)
@@ -631,7 +638,7 @@ def cached_moments(eta: float) -> np.ndarray:
     return moments
 
 
-_node_cache: dict[tuple[float, float, int, int, int], np.ndarray] = {}
+_node_cache: dict[tuple[float, float, int, int, int, float], np.ndarray] = {}
 """Process-wide memo of built node tables, keyed on the node parameters and the
 build sample count. A node's value is a pure function of that key (fixed build
 seed), so sharing across sources is exact — without this, every
@@ -659,20 +666,17 @@ def gs_scaled_deflection_table(
     through the anchoring ``Lambda G_1 = <theta^2>/2``, so the caller specifies
     the step by the same Fermi-Eyges mean-square angle the Gaussian hinge takes.
 
-    **Nodes are bin averages, not quantiles.** Entry ``i`` is the conditional mean
-    of ``1 - mu`` over the ``i``-th equal-probability bin of the distribution, and
-    the sampler draws it piecewise-constant. This is what makes the table's
-    moments exact rather than approximate. Storing *quantiles* and interpolating
-    between them cannot represent a heavy tail: the outermost node is then an
-    extreme order statistic — around the ``1/N``-th quantile of the build sample —
-    while carrying ``1/n_u`` of the sampling weight, which over-weighted wide
-    angles by a factor of roughly 500 and inflated ``<1 - cos>`` by up to 35x at
-    small ``Lambda``. Bin averaging gives every bin its correct probability *and*
-    its correct mean contribution, at the cost of the angular spread within a
-    bin — negligible where bins are narrow, and in the outermost bin a
-    moment-preserving stand-in for a spread of rare wide angles.
+    **Nodes are conditional means, not quantiles.** CDF interval edges are
+    ``u_i = expm1(10 i/n_u) / expm1(10)``. The narrow cells near ``u=0``
+    resolve the rare wide-angle tail, which equal-probability bins replace by
+    one large atom and thereby distort higher transport moments. Integrating
+    the empirical inverse CDF gives each interval its correct probability and
+    mean contribution; only its within-cell angular spread is discarded.
+    The first interval at512 bins carries about9e-7 probability, comparable
+    to one raw construction sample. No scattering strength is fitted.
 
-    **Normalized to ``<w> = 1``**, so the caller rescales by its own exact
+    **Nondegenerate rows are normalized to probability-weighted ``<w> = 1``**,
+    so the caller rescales by its own exact
     ``<1 - cos theta> = 1 - e^{-<theta^2>/2}``. The first moment is then exact
     however coarsely ``eta`` and ``<theta^2>`` were binned, and only the shape
     carries interpolation error. ``<1 - cos>`` is the anchor rather than
@@ -685,29 +689,44 @@ def gs_scaled_deflection_table(
     Returns
     -------
     ndarray
-        Shape ``(n_u,)``, non-negative, mean exactly 1, ascending ``u`` ordered
+        Shape ``(n_u,)``, non-negative, probability-weighted mean 1, ascending ``u`` ordered
         from the widest deflection to the most forward. **Read-only and shared**
         (see :data:`_node_cache`); a consumer that needs to mutate must copy.
     """
-    key = (eta, theta2, n_u, n_mu, _RAW_SAMPLES)
+    from pyradmc.data.interface import _GS_PROBABILITY_LOG_SPAN, _GS_PROBABILITY_SCALE
+
+    key = (eta, theta2, n_u, n_mu, _RAW_SAMPLES, _GS_PROBABILITY_LOG_SPAN)
     cached = _node_cache.get(key)
     if cached is not None:
         return cached
 
     raw = _gs_raw_cosines(eta, theta2, n_mu)
-    # Equal-probability bins; entry i is the conditional mean of 1 - mu over bin i.
-    one_minus_mu = (1.0 - raw).reshape(n_u, raw.size // n_u).mean(axis=1)
-    mean = float(one_minus_mu.mean())
+    edges = np.expm1(np.arange(n_u + 1) * _GS_PROBABILITY_LOG_SPAN / n_u)
+    edges /= _GS_PROBABILITY_SCALE
+    edges[0], edges[-1] = 0.0, 1.0
+    probability = np.diff(edges)
+    # Integrate the empirical inverse CDF exactly, including fractional raw
+    # slots at a bin edge. Each value is its interval's conditional mean.
+    y = 1.0 - raw
+    prefix = np.concatenate(([0.0], np.cumsum(y, dtype=np.float64)))
+    slots = edges * raw.size
+    index = np.minimum(slots.astype(np.int64), raw.size - 1)
+    integral = prefix[index] + (slots - index) * y[index]
+    one_minus_mu = np.diff(integral) / (raw.size * probability)
+    mean = float(np.dot(probability, one_minus_mu))
     if mean <= 0.0:
-        # Degenerate bin: Lambda so small that no build sample scattered at all
-        # (near the floored key, Lambda ~ 1e-9, the all-zero Poisson outcome is
-        # a near certainty). The correct limit is "no deflection": w = 0 makes
+        # Degenerate bin: no member of the finite raw population scattered.
+        # This is certain near the floored key but can also occur when
+        # _RAW_SAMPLES * Lambda is O(1), not only at theta2 <= 1e-12.
+        # Use the forward limiting approximation: w = 0 makes
         # the sampler return mu = 1 - 0 * anchor = 1 exactly. Dividing by the
         # zero mean instead yields a NaN row, and max(-1, nan) is -1 under both
         # Python and CUDA fmaxf semantics — silent certain backscatter, not a
-        # crash. The bias of the forward table against the true distribution is
-        # the anchor itself, 1 - e^{-theta2/2} <= ~1e-12 for any theta2 that
-        # can key this bin. Test-pinned in tests/unit/test_gs_sampler.py.
+        # crash. The missing first moment is the anchor 1-exp(-theta2/2);
+        # it is not bounded by the theta2 grid floor (e.g. eta=.1,
+        # theta2=1e-6). An analytic rare-collision construction would be needed
+        # to retire this approximation. Forward/NaN behaviour is test-pinned
+        # in tests/unit/test_gs_sampler.py.
         normalized: np.ndarray = np.zeros(n_u)
     else:
         normalized = one_minus_mu / mean
@@ -719,16 +738,16 @@ def gs_scaled_deflection_table(
 _RAW_SAMPLES: int = 1 << 19
 """Equally weighted deflection cosines a table is condensed from.
 
-A multiple of any ``n_u`` the sampler uses, so the bin averages in
-:func:`gs_scaled_deflection_table` are over exactly equal-probability groups.
+The empirical inverse CDF has equal-probability slots; its integral is
+partitioned into the logarithmic-probability cells of the sampling table.
 """
 
 
 def _gs_raw_cosines(eta: float, theta2: float, n_mu: int) -> np.ndarray:
     """Equally weighted deflection cosines for one ``(eta, <theta^2>)`` pair.
 
-    Ascending, one per equal-probability slot, so the caller can condense them
-    into bin averages by a plain reshape. Two constructions feed it, split at
+    Ascending, one per equal-probability slot, so the caller can integrate
+    its empirical inverse CDF into conditional-mean bins. Two constructions feed it, split at
     :data:`_SERIES_MIN_LAMBDA`: explicit composition where the Legendre density
     reconstruction cannot represent a lightly scattered distribution, and the
     series elsewhere, where it is accurate and far cheaper.
@@ -811,7 +830,7 @@ class GSGridTables:
         Integer node index of the first eta column and first theta2 row — the
         offsets a sampler subtracts from ``floor(log(key) * bins_per_log)``.
     n_u
-        Equal-probability bins per table.
+        Logarithmic-probability CDF intervals per table.
     bins_per_log
         Grid nodes per natural log in both axes.
     """
@@ -823,11 +842,11 @@ class GSGridTables:
     bins_per_log: float
 
 
-_grid_cache: dict[tuple[int, int, int, int, int, float, int, int], GSGridTables] = {}
+_grid_cache: dict[tuple[int, int, int, int, int, float, int, int, float], GSGridTables] = {}
 _grid_cache_lock = threading.Lock()
 
 
-_GS_GRID_CACHE_VERSION: int = 1
+_GS_GRID_CACHE_VERSION: int = 3
 """Version of the table construction and stored format, for the grid cache key.
 
 **Bump this when the stored format or a node's table contents change**: the
@@ -851,12 +870,15 @@ _lazy_grid_cache: dict[Path, GSGridTables] = {}
 
 def _memo_grid_node(grid: GSGridTables, ix: int, iy: int) -> npt.NDArray[np.float64]:
     """Share an owned node array without pinning obsolete grid allocations."""
+    from pyradmc.data.interface import _GS_PROBABILITY_LOG_SPAN
+
     key = (
         math.exp(ix / grid.bins_per_log),
         math.exp(iy / grid.bins_per_log),
         grid.n_u,
         _GS_TABLE_MU_BINS,
         _RAW_SAMPLES,
+        _GS_PROBABILITY_LOG_SPAN,
     )
     table = _node_cache.get(key)
     if table is None:
@@ -944,11 +966,17 @@ def _grid_cache_key() -> tuple[float | int | str, ...]:
     the reference backend builds in-process — one clean rebuild per numpy
     upgrade is the safe trade.
     """
-    from pyradmc.data.interface import _GS_BINS_PER_LOG, _GS_TABLE_NODES, _GS_THETA2_MIN
+    from pyradmc.data.interface import (
+        _GS_BINS_PER_LOG,
+        _GS_PROBABILITY_LOG_SPAN,
+        _GS_TABLE_NODES,
+        _GS_THETA2_MIN,
+    )
 
     numpy_feature = ".".join(np.__version__.split(".")[:2])
     return (
         _GS_GRID_CACHE_VERSION,
+        _GS_PROBABILITY_LOG_SPAN,
         _GS_BINS_PER_LOG,
         _GS_TABLE_NODES,
         _GS_THETA2_MIN,
@@ -1158,7 +1186,12 @@ def build_gs_grid(
     per run. Builds with overridden grid constants are test instruments and
     stay in-memory.
     """
-    from pyradmc.data.interface import _GS_BINS_PER_LOG, _GS_TABLE_NODES, _GS_THETA2_MIN
+    from pyradmc.data.interface import (
+        _GS_BINS_PER_LOG,
+        _GS_PROBABILITY_LOG_SPAN,
+        _GS_TABLE_NODES,
+        _GS_THETA2_MIN,
+    )
 
     bins = _GS_BINS_PER_LOG if bins_per_log is None else bins_per_log
     nodes = _GS_TABLE_NODES if n_u is None else n_u
@@ -1174,7 +1207,17 @@ def build_gs_grid(
     iy_top = math.floor(math.log(theta2_max) * bins) + 1
 
     use_disk = theta2_min is None and n_u is None and bins_per_log is None
-    key = (ix0, ix_top, iy0, iy_top, nodes, bins, _RAW_SAMPLES, _GS_TABLE_MU_BINS)
+    key = (
+        ix0,
+        ix_top,
+        iy0,
+        iy_top,
+        nodes,
+        bins,
+        _RAW_SAMPLES,
+        _GS_TABLE_MU_BINS,
+        _GS_PROBABILITY_LOG_SPAN,
+    )
     with _grid_cache_lock:
         cached = _grid_cache.get(key)
         if cached is not None:
