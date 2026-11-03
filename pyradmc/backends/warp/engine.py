@@ -1905,6 +1905,9 @@ class WarpEngine:
         cleared only after its fold has completed and before that lane reuses it.
         """
         device = route_args["device"]
+        # As in run_dij, first module loading must happen on the caller thread:
+        # Warp's lazy compilation is not thread-safe across host batch lanes.
+        wp.load_module(kernels, device=device)
         n_voxels = route_args["n_voxels"]
         voxel_mass = route_args["voxel_mass"]
         s1 = route_args["s1"]
