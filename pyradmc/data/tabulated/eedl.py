@@ -238,9 +238,18 @@ def element_scattering_power(
 
     i.e. twice the first transport moment of the tabulated large-angle distribution
     (MF=26/MT=525) times the large-angle elastic cross section (MF=23/MT=525). The
-    smoothly varying moment ``<1-mu>`` is evaluated at EEDL's sparse angular energies
-    and interpolated (log-log) onto the dense cross section grid, so the cross section's
-    energy structure is preserved through the sparse-shape gap.
+    transport cross section ``sigma_1 = sigma_525 * <1-mu>`` is formed at the
+    sparse angular energies, then interpolated after factoring out the leading
+    Coulomb dependence ``1/(p*beta)^2``. Interpolating the normalized angular
+    mean alone over EEDL's 0.256-to-10MeV gap transfers the unrelated curvature
+    of the total elastic rate into sigma_1 and can overestimate it by tens of
+    percent. Here ``p*beta = E*(E+2m)/(E+m)`` in units with c=1.
+
+    The reduced transport cross section is log-log interpolated; its residual
+    screening/Mott dependence is assumed smooth between tabulated shapes.
+    No independently fitted scattering normalization is used. See the DPWA
+    transport cross sections of Salvat et al. (2005),
+    doi:10.1016/j.cpc.2004.09.006, for the Coulomb scaling and independent checks.
 
     **Stated approximation:** the forward screened-Rutherford Coulomb tail beyond the
     last tabulated point (mu = 0.999999) is neglected. Being strongly forward peaked it
@@ -268,8 +277,15 @@ def element_scattering_power(
             raise KeyError(f"no atomic weight for Z={z}; extend STANDARD_ATOMIC_WEIGHT")
         shape_energy_ev = np.array([e for e, _, _ in distributions[mat]])
         mean_1mu = np.array([_mean_one_minus_mu(mu, p) for _, mu, p in distributions[mat]])
-        mean_on_grid = _interp_loglog(energy_ev, shape_energy_ev, mean_1mu)
-        scattering = 2.0 * AVOGADRO / molar_mass * sigma_barns * 1.0e-24 * mean_on_grid
+        mass_ev = 510998.95
+        shape_factor = (
+            shape_energy_ev * (shape_energy_ev + 2.0 * mass_ev) / (shape_energy_ev + mass_ev)
+        ) ** 2
+        grid_factor = (energy_ev * (energy_ev + 2.0 * mass_ev) / (energy_ev + mass_ev)) ** 2
+        sigma_at_shapes = _interp_loglog(shape_energy_ev, energy_ev, sigma_barns)
+        reduced_transport = sigma_at_shapes * mean_1mu * shape_factor
+        transport = _interp_loglog(energy_ev, shape_energy_ev, reduced_transport) / grid_factor
+        scattering = 2.0 * AVOGADRO / molar_mass * 1.0e-24 * transport
         out[z] = (np.asarray(energy_ev, dtype=np.float64) * 1.0e-6, scattering)
     if want is not None and want - set(out):
         raise KeyError(f"elements {sorted(want - set(out))} not found in the EEDL text")
@@ -295,9 +311,24 @@ def material_scattering_power(
 
 
 def _mean_one_minus_mu(mu: np.ndarray, probability: np.ndarray) -> float:
-    """First transport moment ``<1 - mu>`` of a tabulated angular distribution."""
-    weight = np.trapezoid(probability, mu)
-    return float(np.trapezoid((1.0 - mu) * probability, mu) / weight)
+    r"""First transport moment of the EEDL LANG=12 piecewise-linear PDF.
+
+    Integrate the quadratic product exactly on each cell of width ``h``:
+    ``integral y*p = h*((2*y0+y1)*p0 + (y0+2*y1)*p1)/6``, where
+    ``y = 1-mu``. Applying a trapezoid to the product loses its covariance
+    within each cell. The normalization integrates the linear PDF exactly.
+    Forward-angle truncation is unchanged. EEDL: Perkins et al. (1991),
+    UCRL-50400 Vol. 31, doi:10.2172/5696290.
+    """
+    width = np.diff(mu)
+    y = 1.0 - mu
+    first = np.sum(
+        width
+        * ((2.0 * y[:-1] + y[1:]) * probability[:-1] + (y[:-1] + 2.0 * y[1:]) * probability[1:])
+        / 6.0
+    )
+    weight = np.sum(width * (probability[:-1] + probability[1:]) / 2.0)
+    return float(first / weight)
 
 
 def _interp_loglog(

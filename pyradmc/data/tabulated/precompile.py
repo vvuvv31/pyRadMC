@@ -216,6 +216,7 @@ def compile_materials(
         materials=tuple(m.name for m in materials),
         provenance=(
             f"EPDL2023 photons + coherent form factors + EEDL2023 nuclear elastic "
+            f"(reduced transport interpolation; exact linear-PDF angular product) "
             f"+ restricted Moliere electron scattering; "
             f"electron stopping: {strategy.value} ({stopping_provenance}); "
             f"Moller + CSDA Berger-Seltzer; delta_cut={cut} MeV; "

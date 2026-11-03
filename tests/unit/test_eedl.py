@@ -190,9 +190,8 @@ def _s_scat(barns: float, z: int, mean_1mu: float) -> float:
     return 2.0 * AVOGADRO / STANDARD_ATOMIC_WEIGHT[z] * barns * 1.0e-24 * mean_1mu
 
 
-# Two angular distributions on mu in [-1, 1] whose trapezoidal first moment (what the
-# code integrates) is exact on the two endpoints: uniform P=[1,1] -> <1-mu> = 2/2 = 1;
-# forward P=[1,3] -> <1-mu> = trap[(2)(1),(0)(3)]/trap[1,3] = 2/4 = 0.5.
+# Piecewise-linear PDFs on mu in [-1,1]: uniform p=1 gives <1-mu>=1;
+# forward p=2+mu gives integral p=4, integral (1-mu)*p=10/3, hence5/6.
 _UNIFORM = ([-1.0, 1.0], [1.0, 1.0])
 _FORWARD = ([-1.0, 1.0], [1.0, 3.0])
 
@@ -268,8 +267,8 @@ def test_element_scattering_power_is_twice_transport_moment() -> None:
 
     energy_mev, scattering = result[1]
     np.testing.assert_allclose(energy_mev, [1.0, 10.0], rtol=1e-9)
-    # <1-mu> = 1 (uniform) at 1 MeV, 2/3 (linear) at 10 MeV
-    expected = [_s_scat(5.0, 1, 1.0), _s_scat(1.0, 1, 0.5)]
+    # <1-mu> = 1 (uniform) at 1 MeV, 5/6 (linear) at 10 MeV.
+    expected = [_s_scat(5.0, 1, 1.0), _s_scat(1.0, 1, 5.0 / 6.0)]
     np.testing.assert_allclose(scattering, expected, rtol=1e-6)
 
 
@@ -287,8 +286,8 @@ def test_material_scattering_power_is_mass_weighted() -> None:
     fractions = mass_fractions_from_formula({1: 2, 8: 1})
     mixed = material_scattering_power(elements, fractions, grid)
 
-    t_h = np.array([_s_scat(5.0, 1, 1.0), _s_scat(1.0, 1, 0.5)])
-    t_o = np.array([_s_scat(40.0, 8, 1.0), _s_scat(8.0, 8, 0.5)])
+    t_h = np.array([_s_scat(5.0, 1, 1.0), _s_scat(1.0, 1, 5.0 / 6.0)])
+    t_o = np.array([_s_scat(40.0, 8, 1.0), _s_scat(8.0, 8, 5.0 / 6.0)])
     expected = fractions[1] * t_h + fractions[8] * t_o
     np.testing.assert_allclose(mixed, expected, rtol=1e-6)
 

@@ -9,11 +9,12 @@ across the transported range. Its real job is to pin the space-angle convention 
 mean-square-angle factor of two) and the order of magnitude -- a factor-2 error in the
 moment definition would blow this gate. EEDL omits the unresolved forward tail
 (~5 % at 10 MeV, ~11 % at 20 MeV, see ``element_scattering_power``), while its
-2-4 MeV ``<1-mu>`` is interpolated across a 0.256->10 MeV angular-shape gap.
-Both sides add the same below-ECUT electron term and exclude the hard Moller moment
-whose deflection is transported separately. Measured 2026-09-04, tabulated / analytic:
-0.95 at 0.2 MeV, 1.00 at 0.5, 1.10 at 1, 1.27 at 2, 1.12 at 6, 0.91 at 10, 0.87 at
-20 MeV -- the 1-6 MeV excess is the gap interpolation, the 10-20 MeV shortfall the tail.
+sparse angular energies bracket a 0.256-to-10 MeV gap. The compiler now interpolates
+``(p*beta)^2 * sigma_1`` across that gap rather than interpolating the normalized
+moment separately. Both sides add the same below-ECUT electron term and exclude
+the hard Moller moment whose deflection is transported separately. This wide
+consistency band does not validate the interpolation accuracy: a synthetic
+Coulomb-scaling unit test independently pins that behavior.
 
 An *absolute* external gate (ICRU-35 water mass scattering powers, after accounting
 for their electron-scattering convention and large-angle cutoff) is intentionally left as
@@ -81,8 +82,8 @@ def test_eedl_water_scattering_power_tracks_the_transport_moment() -> None:
 def test_eedl_water_scattering_power_is_monotone_decreasing() -> None:
     """Scattering power falls monotonically with energy (~1/(pv)^2); a smoothness check.
 
-    Guards the sparse-shape-grid interpolation: the pre-fix bug interpolated the final
-    product across EEDL's 0.256->10 MeV angular gap and produced a non-monotone bump.
+    Guards against nonphysical bumps across the sparse angular-energy gap.
+    The reduced transport cross section may vary; the final power must decrease.
     """
     text = _eedl_path().read_text(encoding="latin-1")
     elements = element_scattering_power(text, elements={1, 8})

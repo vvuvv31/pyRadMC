@@ -24,6 +24,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from pyradmc import ECUT_MEV
 from pyradmc.data import berger_seltzer
 from pyradmc.data.materials import ADIPOSE, AIR, CORTICAL_BONE, LUNG, MATERIALS, TUNGSTEN, WATER
 from pyradmc.data.tabulated.format import load_tables, save_tables
@@ -31,7 +32,7 @@ from pyradmc.data.tabulated.model import TabulatedData
 from pyradmc.data.tabulated.precompile import compile_materials
 from pyradmc.data.tabulated.source import TabulatedCrossSections
 
-ECUT = 0.2
+ECUT = ECUT_MEV
 
 # Energy (MeV) -> total mass attenuation with coherent (cm^2/g), NIST XCOM mixtures.
 # Tungsten (element 74, fetched 2026-07-15 for the BLD workstream) extends the
@@ -167,13 +168,11 @@ def test_scattering_power_orders_physically(compiled: TabulatedData) -> None:
         assert 0.70 < xs.scattering_power(energy, ADIPOSE, ECUT) / water < 0.95
         assert 0.90 < xs.scattering_power(energy, AIR, ECUT) / water < 1.10
         assert 0.90 < xs.scattering_power(energy, LUNG, ECUT) / water < 1.10
-        # Tungsten's nuclear Z^2/A term dominates its much smaller electron term. Measured
-        # EEDL ratios (2026-07-15): 7.14 / 5.24 / 9.69 at 0.5 / 2 / 10 MeV — centred
-        # on the prediction, but swinging +-35% with energy because the sparse EEDL
-        # angular-shape grid (one 0.256->10 MeV gap) moves the interpolated <1-mu>
-        # moment much more for W than for the tissue media. The bracket spans the
-        # measurement; this is a mixing sanity gate, the magnitude convention is
-        # pinned by the water transport-moment gate.
+        # Tungsten's nuclear Z^2/A term dominates its smaller electron term.
+        # Reduced-transport interpolation replaces the former separately
+        # interpolated angular mean across the 0.256-to-10 MeV gap. Retain
+        # this mixing sanity bracket; it does not establish the interpolation's
+        # accuracy, which is pinned separately against Coulomb scaling.
         assert 4.0 < xs.scattering_power(energy, TUNGSTEN, ECUT) / water < 12.0
 
 

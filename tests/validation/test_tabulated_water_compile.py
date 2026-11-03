@@ -18,6 +18,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from pyradmc import ECUT_MEV
 from pyradmc.backends.ref.engine import ReferenceEngine
 from pyradmc.data.analytic import AnalyticCrossSections
 from pyradmc.data.interface import PhotonProcess
@@ -32,7 +33,7 @@ from pyradmc.rng.host import HostRNG
 from tests.conftest import SEED, assert_chi2_consistent_batched
 
 NIST_WATER_MU_OVER_RHO = {1.0: 0.0707, 2.0: 0.0493, 6.0: 0.0277, 10.0: 0.0222, 15.0: 0.0194}
-ECUT = 0.2
+ECUT = ECUT_MEV
 
 
 def _texts() -> tuple[str, str]:
@@ -53,6 +54,7 @@ def water() -> TabulatedData:
 def test_compiled_structure(water: TabulatedData) -> None:
     """The compiled data is water on geometric grids with all four photon channels."""
     assert water.materials == ("water",)
+    assert "reduced transport interpolation" in water.provenance
     assert set(water.mu_over_rho) == {
         PhotonProcess.COMPTON,
         PhotonProcess.PHOTOELECTRIC,
@@ -97,8 +99,8 @@ def test_compiled_scattering_tracks_the_transport_moment(water: TabulatedData) -
     EEDL supplies the tabulated source's nuclear moment and neglects an unresolved
     forward tail (``element_scattering_power``), reaching ~11 % at 20 MeV. Both
     sources add the same below-ECUT electron moment and exclude hard Moller events.
-    Measured 2026-09-04, tabulated / analytic: 1.10 at 1 MeV, 1.12 at 6 MeV, 0.87 at
-    20 MeV.
+    The sparse angular gap uses reduced-transport interpolation; this wide
+    band checks convention and magnitude rather than differential accuracy.
     """
     xs = TabulatedCrossSections(water)
     analytic = AnalyticCrossSections()
